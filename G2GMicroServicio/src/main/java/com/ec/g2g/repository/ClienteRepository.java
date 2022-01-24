@@ -14,5 +14,6 @@ import com.ec.g2g.entidad.Cliente;
 @Repository
 public interface ClienteRepository extends CrudRepository<Cliente, Integer> {
 	Optional<Cliente> findByCliCedula(String cliCedula);
+	Optional<Cliente> findByCliCedulaAndCliNombre(String cliCedula, String cliNombre);
 
 }

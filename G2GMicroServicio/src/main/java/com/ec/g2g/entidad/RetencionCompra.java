@@ -92,6 +92,11 @@ public class RetencionCompra implements Serializable {
     private Date rcoFechaAutorizacion;
     @Column(name = "rco_pathret")
     private String rcoPathRet;
+    
+    @Column(name = "id_quick")
+    private Integer idQuick;
+    
+    
     @JsonIgnore
     @OneToMany(mappedBy = "rcoCodigo")
     private Collection<DetalleRetencionCompra> detalleRetencionCompraCollection;
@@ -300,7 +305,15 @@ public class RetencionCompra implements Serializable {
         this.rcoBaseGravaIva = rcoBaseGravaIva;
     }
 
-    @Override
+    public Integer getIdQuick() {
+		return idQuick;
+	}
+
+	public void setIdQuick(Integer idQuick) {
+		this.idQuick = idQuick;
+	}
+
+	@Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof RetencionCompra)) {

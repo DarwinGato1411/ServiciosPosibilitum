@@ -137,12 +137,23 @@ public class RetencionesQB {
 				System.out.println("retenciones OBTENIDOS " + retenciones.size());
 
 				for (VendorCredit vendorCredit : retenciones) {
-					System.out.println("NUMERO DIGITOS  "+vendorCredit.getPrivateNote().length()+"   # DOCUM " + vendorCredit.getDocNumber().toUpperCase());
-					if (vendorCredit.getPrivateNote().length() == 17 && vendorCredit.getDocNumber().toUpperCase().contains("RT")) {
+					System.out.println("NUMERO DIGITOS  " + vendorCredit.getPrivateNote().length() + "   # DOCUM "
+							+ vendorCredit.getDocNumber().toUpperCase());
+					/* VALIDAR SI EXISTE LA RETENCION */
+					Optional<RetencionCompra> retencionValida = retencionCompraRepository.findIdQuickOrRcoSecuencial(
+							Integer.valueOf(vendorCredit.getId()), vendorCredit.getDocNumber());
 
-						System.out.println("PROCESANDO RETENCION --> " + mapperVendorToRetencion(vendorCredit));
+					if (!retencionValida.isPresent()) {
+						if (vendorCredit.getPrivateNote().length() == 17
+								&& vendorCredit.getDocNumber().toUpperCase().contains("RT")) {
+
+							System.out.println("PROCESANDO RETENCION --> " + mapperVendorToRetencion(vendorCredit));
+						} else {
+							System.out.println("RETENCION NO PROCESADA " + vendorCredit.getDocNumber());
+
+						}
 					} else {
-						System.out.println("RETENCION NO PROCESADA " + vendorCredit.getDocNumber());
+						System.out.println("LA RETENCION YA EXISTE " + vendorCredit.getDocNumber().toUpperCase());
 
 					}
 				}
@@ -215,7 +226,7 @@ public class RetencionesQB {
 
 			Optional<CabeceraCompra> cabeceraComprasRecup = compraRepository.findByCabNumFactura(numFactura);
 			if (!cabeceraComprasRecup.isPresent()) {
-				System.out.println("INSERTA LA CABECERA DE COMPRA");
+				System.out.println("INSERTA LA CABECERA DE COMPRA NUEVA");
 				cabeceraCompra.setCabNumFactura(numFactura);
 				cabeceraCompra.setCabFecha(vendorCredit.getMetaData().getCreateTime());
 				cabeceraCompra.setCabSubTotal(BigDecimal.ZERO);
@@ -232,113 +243,110 @@ public class RetencionesQB {
 				cabeceraCompra.setCabPuntoEmi(puntoEmision);
 				compraRepository.save(cabeceraCompra);
 
-				/* INICIA RETENCION */
-				RetencionCompra retecionRecup = findUltimoSecuencial().size() > 0 ? findUltimoSecuencial().get(0)
-						: null;
+			} else {
+				cabeceraCompra = cabeceraComprasRecup.get();
+				System.out.println("ACTUALIZA LA COMPRA PARA CREAR UNA NUEVA RETENCION");
+			}
+
+			/* INICIA RETENCION */
+			RetencionCompra retecionRecup = findUltimoSecuencial().size() > 0 ? findUltimoSecuencial().get(0) : null;
 //			String JSONRECUPSEC = gson.toJson(cabeceraCompra);
 //			System.out.println("CABECERA DE COMPRA  "+cabeceraCompra);
-				// si no exite una factura coloca el numero 1
-				Integer numeroRetencion = retecionRecup != null ? retecionRecup.getRcoSecuencial() + 1
-						: valoresGlobales.getTIPOAMBIENTE().getAmSecuencialInicioRetencion();
-				String numeroRetencionText = numeroFacturaTexto(numeroRetencion);
-				System.out.println("numeroRetencionText " + numeroRetencionText);
-				RetencionCompra retencionCompra = new RetencionCompra();
-				retencionCompra.setRcoDetalle("RETENCION QUICK BOOKS");
-				retencionCompra.setRcoFecha(vendorCredit.getTxnDate());
-				retencionCompra.setRcoIva(Boolean.FALSE);
-				retencionCompra.setRcoPorcentajeIva(12);
-				retencionCompra.setRcoPuntoEmision(valoresGlobales.getTIPOAMBIENTE().getAmPtoemi());
-				retencionCompra.setRcoSecuencial(numeroRetencion);
-				retencionCompra.setRcoSerie("1");
-				retencionCompra.setRcoValorRetencionIva(BigDecimal.ZERO);
-				retencionCompra.setIdCabecera(cabeceraCompra);
-				retencionCompra.setCabFechaEmision(vendorCredit.getTxnDate());
-				retencionCompra.setDrcEstadosri("PENDIENTE");
-				// generar la clave de acceso y autorizacion
-				String claveAcceso = ArchivoUtils.generaClave(vendorCredit.getTxnDate(), "07",
-						valoresGlobales.getTIPOAMBIENTE().getAmRuc(), valoresGlobales.getTIPOAMBIENTE().getAmCodigo(),
-						valoresGlobales.getTIPOAMBIENTE().getAmEstab()
-								+ valoresGlobales.getTIPOAMBIENTE().getAmPtoemi(),
-						numeroRetencionText, "12345678", "1");
-				System.out.println("claveAcceso " + claveAcceso);
-				retencionCompra.setRcoAutorizacion(claveAcceso);
-				retencionCompra.setRcoSecuencialText(numeroRetencionText);
-				retencionCompra.setCodTipoambiente(valoresGlobales.getTIPOAMBIENTE());
+			// si no exite una factura coloca el numero 1
+			Integer numeroRetencion = retecionRecup != null ? retecionRecup.getRcoSecuencial() + 1
+					: valoresGlobales.getTIPOAMBIENTE().getAmSecuencialInicioRetencion();
+			String numeroRetencionText = numeroFacturaTexto(numeroRetencion);
+			System.out.println("numeroRetencionText " + numeroRetencionText);
+			RetencionCompra retencionCompra = new RetencionCompra();
+			retencionCompra.setRcoDetalle("RETENCION QUICK BOOKS");
+			retencionCompra.setRcoFecha(vendorCredit.getTxnDate());
+			retencionCompra.setRcoIva(Boolean.FALSE);
+			retencionCompra.setRcoPorcentajeIva(12);
+			retencionCompra.setRcoPuntoEmision(valoresGlobales.getTIPOAMBIENTE().getAmPtoemi());
+			retencionCompra.setRcoSecuencial(numeroRetencion);
+			retencionCompra.setRcoSerie("1");
+			retencionCompra.setRcoValorRetencionIva(BigDecimal.ZERO);
+			retencionCompra.setIdCabecera(cabeceraCompra);
+			retencionCompra.setCabFechaEmision(vendorCredit.getTxnDate());
+			retencionCompra.setDrcEstadosri("PENDIENTE");
+			// generar la clave de acceso y autorizacion
+			String claveAcceso = ArchivoUtils.generaClave(vendorCredit.getTxnDate(), "07",
+					valoresGlobales.getTIPOAMBIENTE().getAmRuc(), valoresGlobales.getTIPOAMBIENTE().getAmCodigo(),
+					valoresGlobales.getTIPOAMBIENTE().getAmEstab() + valoresGlobales.getTIPOAMBIENTE().getAmPtoemi(),
+					numeroRetencionText, "12345678", "1");
+			System.out.println("claveAcceso " + claveAcceso);
+			retencionCompra.setRcoAutorizacion(claveAcceso);
+			retencionCompra.setRcoSecuencialText(numeroRetencionText);
+			retencionCompra.setCodTipoambiente(valoresGlobales.getTIPOAMBIENTE());
 
-				if (!claveAcceso.contains("null")) {
-					retencionCompraRepository.save(retencionCompra);
-				}
-				DetalleRetencionCompra detalleRetencionCompra = new DetalleRetencionCompra();
+			if (!claveAcceso.contains("null")) {
+				retencionCompraRepository.save(retencionCompra);
+			}
+			DetalleRetencionCompra detalleRetencionCompra = new DetalleRetencionCompra();
 
-				/* REGISTRAMOS EL DETALLE DE LA RETENCION */
-				for (Line detalleRet : vendorCredit.getLine()) {
-					detalleRetencionCompra = new DetalleRetencionCompra();
-					detalleRetencionCompra.setDrcBaseImponible(detalleRet.getDescription() != null
-							? BigDecimal.valueOf(Double.valueOf(detalleRet.getDescription()))
-							: BigDecimal.ZERO);
-					List<TaxRate> rateDetail = null;
-					TaxRate taxRatePorcet = null;
-					TaxCode taxCode = taxCodeQB
-							.obtenerTaxCode(detalleRet.getAccountBasedExpenseLineDetail().getTaxCodeRef().getValue());
+			/* REGISTRAMOS EL DETALLE DE LA RETENCION */
+			for (Line detalleRet : vendorCredit.getLine()) {
+				detalleRetencionCompra = new DetalleRetencionCompra();
+				detalleRetencionCompra.setDrcBaseImponible(detalleRet.getDescription() != null
+						? BigDecimal.valueOf(Double.valueOf(detalleRet.getDescription()))
+						: BigDecimal.ZERO);
+				List<TaxRate> rateDetail = null;
+				TaxRate taxRatePorcet = null;
+				TaxCode taxCode = taxCodeQB
+						.obtenerTaxCode(detalleRet.getAccountBasedExpenseLineDetail().getTaxCodeRef().getValue());
 
-					for (TaxRateDetail detail : taxCode.getPurchaseTaxRateList().getTaxRateDetail()) {
-						if (detail.getTaxRateRef().getName().contains("Compras")) {
-							for (TaxRate taxrate : taxCodeQB.obtenerTaxRateDetail(detail.getTaxRateRef().getValue())) {
-								if (taxrate.getName().contains("Compras")) {
-									taxRatePorcet = taxrate;
-								}
-
+				for (TaxRateDetail detail : taxCode.getPurchaseTaxRateList().getTaxRateDetail()) {
+					if (detail.getTaxRateRef().getName().contains("Compras")) {
+						for (TaxRate taxrate : taxCodeQB.obtenerTaxRateDetail(detail.getTaxRateRef().getValue())) {
+							if (taxrate.getName().contains("Compras")) {
+								taxRatePorcet = taxrate;
 							}
-						}
-
-					}
-
-					detalleRetencionCompra
-							.setDrcPorcentaje(taxRatePorcet != null ? taxRatePorcet.getRateValue() : BigDecimal.ZERO);
-					detalleRetencionCompra.setDrcValorRetenido(detalleRet.getAmount());
-					detalleRetencionCompra.setRcoCodigo(retencionCompra);
-					// codigo de retenion
-					// verificar como se enviaria el codigo
-					// PARA EL CASO DEL IVA
-					if (detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA")) {
-
-						TipoRetencion tipoRetencion = tipoRetencionRepository.findByTireCodigo("001").get();
-						detalleRetencionCompra.setTireCodigo(tipoRetencion);
-
-						System.out.println("VENDOR PORCENTAJE TIPO IVA " + taxRatePorcet.getRateValue().toString());
-						Optional<Tipoivaretencion> tipoIva = tipoIvaRetencionRepository.findByTipivaretDescripcion(
-								taxRatePorcet != null ? String.valueOf(taxRatePorcet.getRateValue().intValue()) : "0");
-						if (tipoIva.isPresent()) {
-							detalleRetencionCompra.setIdTipoivaretencion(tipoIva.get());
 
 						}
-
-					} else {
-						// PARA EL CASO DEL RENTA
-						TipoRetencion tipoRetencion = tipoRetencionRepository.findByTireCodigo(taxCode.getName()).get();
-						detalleRetencionCompra.setTireCodigo(tipoRetencion);
-
 					}
 
-					// 1 ES RENTA 2 ES IVA
-					detalleRetencionCompra.setDrcCodImpuestoAsignado(
-							detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA")
-									? "2"
-									: "1");
-
-					// dependiendo la funcionalidad lo llenamos
-					detalleRetencionCompra.setDrcDescripcion(
-							detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA")
-									? "IVA"
-									: "RENTA");
-					detalleRetencionCompra.setDrcTipoRegistro(
-							detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA")
-									? "IVA"
-									: "R");
-					detalleRetencionCompraRepository.save(detalleRetencionCompra);
 				}
-			}else {
-				System.out.println("NO INGRESA A CREAR LA RETENCION");
+
+				detalleRetencionCompra
+						.setDrcPorcentaje(taxRatePorcet != null ? taxRatePorcet.getRateValue() : BigDecimal.ZERO);
+				detalleRetencionCompra.setDrcValorRetenido(detalleRet.getAmount());
+				detalleRetencionCompra.setRcoCodigo(retencionCompra);
+				// codigo de retenion
+				// verificar como se enviaria el codigo
+				// PARA EL CASO DEL IVA
+				if (detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA")) {
+
+					TipoRetencion tipoRetencion = tipoRetencionRepository.findByTireCodigo("001").get();
+					detalleRetencionCompra.setTireCodigo(tipoRetencion);
+
+					System.out.println("VENDOR PORCENTAJE TIPO IVA " + taxRatePorcet.getRateValue().toString());
+					Optional<Tipoivaretencion> tipoIva = tipoIvaRetencionRepository.findByTipivaretDescripcion(
+							taxRatePorcet != null ? String.valueOf(taxRatePorcet.getRateValue().intValue()) : "0");
+					if (tipoIva.isPresent()) {
+						detalleRetencionCompra.setIdTipoivaretencion(tipoIva.get());
+
+					}
+
+				} else {
+					// PARA EL CASO DEL RENTA
+					TipoRetencion tipoRetencion = tipoRetencionRepository.findByTireCodigo(taxCode.getName()).get();
+					detalleRetencionCompra.setTireCodigo(tipoRetencion);
+
+				}
+
+				// 1 ES RENTA 2 ES IVA
+				detalleRetencionCompra.setDrcCodImpuestoAsignado(
+						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA") ? "2"
+								: "1");
+
+				// dependiendo la funcionalidad lo llenamos
+				detalleRetencionCompra.setDrcDescripcion(
+						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA") ? "IVA"
+								: "RENTA");
+				detalleRetencionCompra.setDrcTipoRegistro(
+						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA") ? "IVA"
+								: "R");
+				detalleRetencionCompraRepository.save(detalleRetencionCompra);
 			}
 
 		} catch (Exception e) {

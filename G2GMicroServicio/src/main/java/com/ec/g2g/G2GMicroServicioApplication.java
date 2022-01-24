@@ -121,6 +121,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 
 	@Value("${posibilitum.ruc.empresa}")
 	String RUCEMPRESA;
+	@Value("${server.port}")
+	String puerto;
 
 	/* RETENCIOONES */
 	@Autowired
@@ -137,8 +139,6 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
-
 
 	public List<Factura> findUltimoSecuencial() {
 		return entityManager
@@ -159,6 +159,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 //
 	@PostConstruct
 	public void init() {
+		System.out.println("puerto " + puerto);
+//		Optional<Cliente> clienetRecup = clienteRepository.findByCliCedulaAndCliNombre("1718264839",nombreCliente);
 		Optional<Usuario> usuarioRecup = usuarioRepository.findByUsuLogin(RUCEMPRESA);
 		if (!usuarioRecup.isPresent()) {
 			Usuario usuario = new Usuario();
@@ -214,6 +216,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 			tipoambiente.setAmAgeRet(Boolean.FALSE);
 			tipoambiente.setAmContrEsp(Boolean.FALSE);
 			tipoambiente.setAmExp(Boolean.FALSE);
+//			tipoambiente.setAmstadoPosibilitum(puerto)
+			tipoambiente.setAmPuerto(puerto);
 			tipoAmbienteRepository.save(tipoambiente);
 
 			// PRODUCCION
@@ -254,6 +258,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 			tipoambienteProd.setAmAgeRet(Boolean.FALSE);
 			tipoambienteProd.setAmContrEsp(Boolean.FALSE);
 			tipoambienteProd.setAmExp(Boolean.FALSE);
+			tipoambiente.setAmPuerto(puerto);
 			tipoAmbienteRepository.save(tipoambienteProd);
 
 			Parametrizar parametrizar = new Parametrizar();
@@ -311,6 +316,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 		Date fechaConsulta = new Date();
 		Calendar c = Calendar.getInstance();
 		c.setTime(fechaConsulta);
+		// reta loos dias que necesitas
 		c.add(Calendar.DATE, -1);
 		fechaConsulta = c.getTime();
 
@@ -319,6 +325,13 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 		System.out.println("OBTIENE LOS DOCUMENTOS CADA 5 MINUTOS FACTURAS --> CONTADOR : " + contador);
 
 		if (valoresGlobales.REALMID != null && valoresGlobales.REFRESHTOKEN != null) {
+			Tipoambiente recup = tipoAmbiente.get();
+			if (!recup.getAmstadoPosibilitum()) {
+				recup.setAmstadoPosibilitum(Boolean.TRUE);
+				tipoAmbienteRepository.save(recup);
+
+			}
+
 			String realmId = valoresGlobales.REALMID;
 			// String accessToken = valoresGlobales.TOKEN;
 			String accessToken = manejarToken.refreshToken(valoresGlobales.REFRESHTOKEN);
@@ -691,10 +704,12 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 				// HttpStatus.BAD_REQUEST);
 				logger.error("Error while calling FMSException :: " + e.getMessage());
 			}
-		} else
-
-		{
+		} else {
 			System.out.println("REALMID NULL");
+			Tipoambiente recup = tipoAmbiente.get();
+			recup.setAmstadoPosibilitum(Boolean.FALSE);
+			tipoAmbienteRepository.save(recup);
+
 		}
 	}
 
@@ -803,7 +818,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 		}
 
 		Cliente cliente = null;
-		Optional<Cliente> clienetRecup = clienteRepository.findByCliCedula(identificacion);
+		String nombreCliente = customer.getFullyQualifiedName() != null ? customer.getFullyQualifiedName() : "S/N";
+		Optional<Cliente> clienetRecup = clienteRepository.findByCliCedulaAndCliNombre(identificacion, nombreCliente);
 		if (clienetRecup.isPresent()) {
 
 			Cliente cliente2 = clienetRecup.get();

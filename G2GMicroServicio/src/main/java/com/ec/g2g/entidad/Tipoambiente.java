@@ -166,6 +166,11 @@ public class Tipoambiente implements Serializable {
 	
 	@Column(name = "am_envio_automatico")
 	private Boolean amEnvioAutomatico;
+	
+    @Column(name = "am_estado_posibilitum")
+    private Boolean amstadoPosibilitum;
+    @Column(name = "am_puerto")
+    private String amPuerto;
 
 	public Tipoambiente() {
 	}
@@ -593,6 +598,22 @@ public class Tipoambiente implements Serializable {
 
 	public void setAmEnvioAutomatico(Boolean amEnvioAutomatico) {
 		this.amEnvioAutomatico = amEnvioAutomatico;
+	}
+
+	public Boolean getAmstadoPosibilitum() {
+		return amstadoPosibilitum;
+	}
+
+	public void setAmstadoPosibilitum(Boolean amstadoPosibilitum) {
+		this.amstadoPosibilitum = amstadoPosibilitum;
+	}
+
+	public String getAmPuerto() {
+		return amPuerto;
+	}
+
+	public void setAmPuerto(String amPuerto) {
+		this.amPuerto = amPuerto;
 	}
 
 	@Override
