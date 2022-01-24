@@ -147,7 +147,7 @@ public class RetencionesQB {
 						/* VALIDAR SI EXISTE LA RETENCION */
 						Optional<RetencionCompra> retencionValida = retencionCompraRepository
 								.findByIdQuickOrRcoSecuencialText(Integer.valueOf(vendorCredit.getId()),
-										numeroRetencion);
+										numeroRetencion, valoresGlobales.getTIPOAMBIENTE().getAmRuc());
 						if (!retencionValida.isPresent()) {
 							System.out.println("PROCESANDO RETENCION --> " + mapperVendorToRetencion(vendorCredit));
 						} else {
