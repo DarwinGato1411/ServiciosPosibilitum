@@ -35,6 +35,7 @@ import com.ec.g2g.entidad.Tipoambiente;
 import com.ec.g2g.entidad.Usuario;
 import com.ec.g2g.global.ValoresGlobales;
 import com.ec.g2g.quickbook.ManejarToken;
+import com.ec.g2g.quickbook.NotasCreditoQB;
 import com.ec.g2g.quickbook.QBOServiceHelper;
 import com.ec.g2g.quickbook.RetencionesQB;
 import com.ec.g2g.quickbook.TaxCodeQB;
@@ -127,6 +128,9 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	/* RETENCIOONES */
 	@Autowired
 	private RetencionesQB retencionesQB;
+	/* RETENCIOONES */
+	@Autowired
+	private NotasCreditoQB notasCreditoQB;
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
@@ -216,7 +220,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 			tipoambiente.setAmAgeRet(Boolean.FALSE);
 			tipoambiente.setAmContrEsp(Boolean.FALSE);
 			tipoambiente.setAmExp(Boolean.FALSE);
-//			tipoambiente.setAmstadoPosibilitum(puerto)
+			tipoambiente.setAmstadoPosibilitum(Boolean.FALSE);
 			tipoambiente.setAmPuerto(puerto);
 			tipoAmbienteRepository.save(tipoambiente);
 
@@ -258,7 +262,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 			tipoambienteProd.setAmAgeRet(Boolean.FALSE);
 			tipoambienteProd.setAmContrEsp(Boolean.FALSE);
 			tipoambienteProd.setAmExp(Boolean.FALSE);
-			tipoambiente.setAmPuerto(puerto);
+			tipoambienteProd.setAmPuerto(puerto);
+			tipoambienteProd.setAmstadoPosibilitum(Boolean.FALSE);
 			tipoAmbienteRepository.save(tipoambienteProd);
 
 			Parametrizar parametrizar = new Parametrizar();
@@ -280,7 +285,6 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	}
 
 //dejarlo cada 8 minutos
-
 	@Scheduled(fixedRate = 8 * 60 * 1000)
 	public void tareaProcesaFacturas() {
 		RestTemplate restTemplate = new RestTemplate();
@@ -288,7 +292,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 				RespuestaDocumentos.class);
 		Gson gson = new Gson();
 		String JSON = gson.toJson(respueta);
-		System.out.println("RESPUESTA FACTURAS  AUTORIZADAS" + respueta);
+		System.out.println("RESPUESTA FACTURAS  AUTORIZADAS" + JSON);
 
 	}
 
@@ -297,6 +301,13 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	public void tareaRetenciones() {
 		System.out.println("OBTIENE LOS DOCUMENTOS CADA 10 MINUTOS RETENCIONES : ");
 		retencionesQB.obtenerRetenciones();
+	}
+	
+	/* Tiempo de retenciones */
+	@Scheduled(fixedRate = 12 * 60 * 1000)
+	public void tareaNotaCredito() {
+		System.out.println("OBTIENE LOS DOCUMENTOS CADA 12 MINUTOS NOTAS DE CREDITRO : ");
+//		notasCreditoQB.obtenerRetenciones();
 	}
 
 	/* Tiempo de facturas */

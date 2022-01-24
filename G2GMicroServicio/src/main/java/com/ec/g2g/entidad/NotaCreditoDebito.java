@@ -121,6 +121,7 @@ public class NotaCreditoDebito implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "fac_clave_acceso")
     private String facClaveAcceso;
+    /*cambiar a forenley*/
     @Column(name = "cod_tipoambiente")
     private Integer codTipoambiente;
     @Size(max = 2147483647)
