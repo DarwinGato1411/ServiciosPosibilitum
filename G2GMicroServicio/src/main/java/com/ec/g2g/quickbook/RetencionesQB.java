@@ -140,7 +140,7 @@ public class RetencionesQB {
 					System.out.println("NUMERO DIGITOS  " + vendorCredit.getPrivateNote().length() + "   # DOCUM "
 							+ vendorCredit.getDocNumber().toUpperCase());
 					/* VALIDAR SI EXISTE LA RETENCION */
-					Optional<RetencionCompra> retencionValida = retencionCompraRepository.findIdQuickOrRcoSecuencial(
+					Optional<RetencionCompra> retencionValida = retencionCompraRepository.findByIdQuickOrRcoSecuencial(
 							Integer.valueOf(vendorCredit.getId()), vendorCredit.getDocNumber());
 
 					if (!retencionValida.isPresent()) {

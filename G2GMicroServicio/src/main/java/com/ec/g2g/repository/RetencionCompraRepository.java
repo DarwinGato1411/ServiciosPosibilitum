@@ -17,6 +17,6 @@ import com.ec.g2g.entidad.RetencionCompra;
 public interface RetencionCompraRepository extends CrudRepository<RetencionCompra, Integer> {
 	/* ultimo secuencial */
 	RetencionCompra findFirstByOrderByRcoSecuencialDesc();
-	Optional<RetencionCompra> findIdQuickOrRcoSecuencial(Integer idQuick, String rcoSecuencial);
+	Optional<RetencionCompra> findByIdQuickOrRcoSecuencial(Integer idQuick, String rcoSecuencial);
 
 }
