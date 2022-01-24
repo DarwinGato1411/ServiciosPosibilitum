@@ -25,9 +25,6 @@ public interface FacturaRepository extends CrudRepository<Factura, Integer> {
 
 	Optional<Factura> findByFacSecuencialUnico(String facSecuencialUnico);
 
-	@Query("SELECT u FROM RetencionCompra u WHERE  u.txnId =:txnId  and u.codTipoambiente.amRuc =:amRuc")
+	@Query("SELECT u FROM Factura u WHERE  u.txnId =:txnId  and u.codTipoambiente.amRuc =:amRuc")
 	Optional<Factura> findByTxnId(@Param("idQuick") Integer idQuick, @Param("amRuc") String amRuc);
-
-//	Factura findFirstByOrderByFacNumeroDescCodTipoambienteAmRuc(String amRuc);
-
 }
