@@ -139,23 +139,27 @@ public class RetencionesQB {
 				for (VendorCredit vendorCredit : retenciones) {
 					System.out.println("NUMERO DIGITOS  " + vendorCredit.getPrivateNote().length() + "   # DOCUM "
 							+ vendorCredit.getDocNumber().toUpperCase());
-					/* VALIDAR SI EXISTE LA RETENCION */
-					Optional<RetencionCompra> retencionValida = retencionCompraRepository.findByIdQuickOrRcoSecuencial(
-							Integer.valueOf(vendorCredit.getId()), vendorCredit.getDocNumber());
 
-					if (!retencionValida.isPresent()) {
-						if (vendorCredit.getPrivateNote().length() == 17
-								&& vendorCredit.getDocNumber().toUpperCase().contains("RT")) {
-
+					if (vendorCredit.getPrivateNote().length() == 17
+							&& vendorCredit.getDocNumber().toUpperCase().contains("RT")) {
+						String separaNumero[] = vendorCredit.getDocNumber().split("-");
+						String numeroRetencion = separaNumero[1];
+						/* VALIDAR SI EXISTE LA RETENCION */
+						Optional<RetencionCompra> retencionValida = retencionCompraRepository
+								.findByIdQuickOrRcoSecuencialText(Integer.valueOf(vendorCredit.getId()),
+										numeroRetencion);
+						if (!retencionValida.isPresent()) {
 							System.out.println("PROCESANDO RETENCION --> " + mapperVendorToRetencion(vendorCredit));
 						} else {
-							System.out.println("RETENCION NO PROCESADA " + vendorCredit.getDocNumber());
+							System.out.println("LA RETENCION YA EXISTE " + vendorCredit.getDocNumber().toUpperCase());
 
 						}
+
 					} else {
-						System.out.println("LA RETENCION YA EXISTE " + vendorCredit.getDocNumber().toUpperCase());
+						System.out.println("RETENCION NO PROCESADA " + vendorCredit.getDocNumber());
 
 					}
+
 				}
 			}
 		} catch (Exception e) {
