@@ -601,7 +601,7 @@ public class Tipoambiente implements Serializable {
 	}
 
 	public Boolean getAmstadoPosibilitum() {
-		return amstadoPosibilitum;
+		return amstadoPosibilitum==null?Boolean.FALSE:amstadoPosibilitum ;
 	}
 
 	public void setAmstadoPosibilitum(Boolean amstadoPosibilitum) {
