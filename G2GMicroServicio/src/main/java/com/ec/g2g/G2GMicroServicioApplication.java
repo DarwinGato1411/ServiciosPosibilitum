@@ -293,7 +293,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	}
 
 	/* Tiempo de retenciones */
-	@Scheduled(fixedRate = 1 * 60 * 1000)
+	@Scheduled(fixedRate = 10 * 60 * 1000)
 	public void tareaRetenciones() {
 		System.out.println("OBTIENE LOS DOCUMENTOS CADA 10 MINUTOS RETENCIONES : ");
 		retencionesQB.obtenerRetenciones();
@@ -369,7 +369,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 					String JSON = gson.toJson(invoice);
 					System.out.println("JSON FACTURA " + JSON);
 					Optional<Factura> facturaRegistrada = facturaRepository
-							.findByTxnId(Integer.valueOf(invoice.getId()));
+							.findByTxnId(Integer.valueOf(invoice.getId()),valoresGlobales.getTIPOAMBIENTE().getAmRuc());
 
 //					Customer cliente = getFacturaCostumer("24");
 //					String JSONCLIENTE = gson.toJson(customer);
