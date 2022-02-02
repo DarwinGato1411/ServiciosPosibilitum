@@ -141,7 +141,7 @@
 	</dependencies>
 
 	<build>
-	<finalName>sellaplastic8788</finalName>
+	<finalName>santiagorafael8795</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

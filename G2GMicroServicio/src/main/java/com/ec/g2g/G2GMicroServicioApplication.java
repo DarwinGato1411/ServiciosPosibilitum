@@ -35,7 +35,7 @@ import com.ec.g2g.entidad.Tipoambiente;
 import com.ec.g2g.entidad.Usuario;
 import com.ec.g2g.global.ValoresGlobales;
 import com.ec.g2g.quickbook.ManejarToken;
-import com.ec.g2g.quickbook.NotasCreditoQB;
+//import com.ec.g2g.quickbook.NotasCreditoQB;
 import com.ec.g2g.quickbook.QBOServiceHelper;
 import com.ec.g2g.quickbook.RetencionesQB;
 import com.ec.g2g.quickbook.TaxCodeQB;
@@ -129,8 +129,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	@Autowired
 	private RetencionesQB retencionesQB;
 	/* RETENCIOONES */
-	@Autowired
-	private NotasCreditoQB notasCreditoQB;
+	/*@Autowired
+	private NotasCreditoQB notasCreditoQB;*/
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
@@ -297,18 +297,18 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	}
 
 	/* Tiempo de retenciones */
-	@Scheduled(fixedRate = 10 * 60 * 1000)
+	@Scheduled(fixedRate = 4 * 60 * 1000)
 	public void tareaRetenciones() {
 		System.out.println("OBTIENE LOS DOCUMENTOS CADA 10 MINUTOS RETENCIONES : ");
 		retencionesQB.obtenerRetenciones();
 	}
 	
-	/* Tiempo de retenciones */
-	@Scheduled(fixedRate = 12 * 60 * 1000)
+	/* Tiempo de notas de credito */
+/*	@Scheduled(fixedRate = 12 * 60 * 1000)
 	public void tareaNotaCredito() {
 		System.out.println("OBTIENE LOS DOCUMENTOS CADA 12 MINUTOS NOTAS DE CREDITRO : ");
 //		notasCreditoQB.obtenerRetenciones();
-	}
+	}*/
 
 	/* Tiempo de facturas */
 	@Scheduled(fixedRate = 3 * 60 * 1000)
@@ -328,7 +328,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 		Calendar c = Calendar.getInstance();
 		c.setTime(fechaConsulta);
 		// reta loos dias que necesitas
-		c.add(Calendar.DATE, -1);
+		c.add(Calendar.DATE, -5);
 		fechaConsulta = c.getTime();
 
 		System.out.println("format.fechaConsulta  " + format.format(fechaConsulta));
