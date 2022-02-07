@@ -283,6 +283,7 @@ public class RetencionesQB {
 			retencionCompra.setRcoSecuencialText(numeroRetencionText);
 			retencionCompra.setCodTipoambiente(valoresGlobales.getTIPOAMBIENTE());
 
+			
 			if (!claveAcceso.contains("null")) {
 				retencionCompraRepository.save(retencionCompra);
 			}
@@ -318,7 +319,7 @@ public class RetencionesQB {
 				// codigo de retenion
 				// verificar como se enviaria el codigo
 				// PARA EL CASO DEL IVA
-				if (detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA")) {
+				if (detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA")) {
 
 					TipoRetencion tipoRetencion = tipoRetencionRepository.findByTireCodigo("001").get();
 					detalleRetencionCompra.setTireCodigo(tipoRetencion);
@@ -340,15 +341,15 @@ public class RetencionesQB {
 
 				// 1 ES RENTA 2 ES IVA
 				detalleRetencionCompra.setDrcCodImpuestoAsignado(
-						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA") ? "2"
+						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA") ? "2"
 								: "1");
 
 				// dependiendo la funcionalidad lo llenamos
 				detalleRetencionCompra.setDrcDescripcion(
-						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA") ? "IVA"
+						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA") ? "IVA"
 								: "RENTA");
 				detalleRetencionCompra.setDrcTipoRegistro(
-						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().contains("IVA") ? "IVA"
+						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA") ? "IVA"
 								: "R");
 				detalleRetencionCompraRepository.save(detalleRetencionCompra);
 			}
