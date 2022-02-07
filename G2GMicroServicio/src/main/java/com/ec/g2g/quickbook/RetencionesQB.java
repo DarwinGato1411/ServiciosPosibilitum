@@ -273,6 +273,7 @@ public class RetencionesQB {
 			retencionCompra.setIdCabecera(cabeceraCompra);
 			retencionCompra.setCabFechaEmision(vendorCredit.getTxnDate());
 			retencionCompra.setDrcEstadosri("PENDIENTE");
+			retencionCompra.setIdQuick(Integer.valueOf(vendorCredit.getId()));
 			// generar la clave de acceso y autorizacion
 			String claveAcceso = ArchivoUtils.generaClave(vendorCredit.getTxnDate(), "07",
 					valoresGlobales.getTIPOAMBIENTE().getAmRuc(), valoresGlobales.getTIPOAMBIENTE().getAmCodigo(),
