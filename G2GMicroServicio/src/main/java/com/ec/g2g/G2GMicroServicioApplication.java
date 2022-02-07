@@ -222,6 +222,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 			tipoambiente.setAmExp(Boolean.FALSE);
 			tipoambiente.setAmstadoPosibilitum(Boolean.FALSE);
 			tipoambiente.setAmPuerto(puerto);
+			tipoambiente.setAmRipme(Boolean.FALSE);
 			tipoAmbienteRepository.save(tipoambiente);
 
 			// PRODUCCION
@@ -264,6 +265,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 			tipoambienteProd.setAmExp(Boolean.FALSE);
 			tipoambienteProd.setAmPuerto(puerto);
 			tipoambienteProd.setAmstadoPosibilitum(Boolean.FALSE);
+			tipoambienteProd.setAmRipme(Boolean.FALSE);
 			tipoAmbienteRepository.save(tipoambienteProd);
 
 			Parametrizar parametrizar = new Parametrizar();
