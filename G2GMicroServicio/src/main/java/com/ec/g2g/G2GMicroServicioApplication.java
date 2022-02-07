@@ -1,6 +1,7 @@
 package com.ec.g2g;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -69,6 +70,8 @@ import com.intuit.ipp.exception.InvalidTokenException;
 import com.intuit.ipp.services.DataService;
 import com.intuit.ipp.services.QueryResult;
 
+import ch.qos.logback.core.joran.conditional.IfAction;
+
 @SpringBootApplication
 @EnableScheduling
 public class G2GMicroServicioApplication extends SpringBootServletInitializer {
@@ -129,8 +132,9 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 	@Autowired
 	private RetencionesQB retencionesQB;
 	/* RETENCIOONES */
-	/*@Autowired
-	private NotasCreditoQB notasCreditoQB;*/
+	/*
+	 * @Autowired private NotasCreditoQB notasCreditoQB;
+	 */
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
@@ -304,13 +308,14 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 		System.out.println("OBTIENE LOS DOCUMENTOS CADA 10 MINUTOS RETENCIONES : ");
 		retencionesQB.obtenerRetenciones();
 	}
-	
+
 	/* Tiempo de notas de credito */
-/*	@Scheduled(fixedRate = 12 * 60 * 1000)
-	public void tareaNotaCredito() {
-		System.out.println("OBTIENE LOS DOCUMENTOS CADA 12 MINUTOS NOTAS DE CREDITRO : ");
-//		notasCreditoQB.obtenerRetenciones();
-	}*/
+	/*
+	 * @Scheduled(fixedRate = 12 * 60 * 1000) public void tareaNotaCredito() {
+	 * System.out.
+	 * println("OBTIENE LOS DOCUMENTOS CADA 12 MINUTOS NOTAS DE CREDITRO : "); //
+	 * notasCreditoQB.obtenerRetenciones(); }
+	 */
 
 	/* Tiempo de facturas */
 	@Scheduled(fixedRate = 3 * 60 * 1000)
@@ -380,9 +385,9 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 				for (Invoice invoice : facturas) {
 					Gson gson = new Gson();
 					String JSON = gson.toJson(invoice);
-					System.out.println("JSON FACTURA " + JSON);
-					Optional<Factura> facturaRegistrada = facturaRepository
-							.findByTxnId(Integer.valueOf(invoice.getId()),valoresGlobales.getTIPOAMBIENTE().getAmRuc());
+					System.out.println("JSON FACTURAAAAAAAAAAAAAAAA " + JSON);
+					Optional<Factura> facturaRegistrada = facturaRepository.findByTxnId(
+							Integer.valueOf(invoice.getId()), valoresGlobales.getTIPOAMBIENTE().getAmRuc());
 
 //					Customer cliente = getFacturaCostumer("24");
 //					String JSONCLIENTE = gson.toJson(customer);
@@ -435,11 +440,15 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 
 						for (Line item : itemsRefDesc) {
 
-							porcentajeDescuento = item.getDiscountLineDetail() != null
-									? item.getDiscountLineDetail().getDiscountPercent()
-									: BigDecimal.ZERO;
 							if (item.getDetailType() == LineDetailTypeEnum.DISCOUNT_LINE_DETAIL) {
 								montoDescuento = item.getAmount();
+
+								if (item.getDiscountLineDetail().isPercentBased()) {
+
+									porcentajeDescuento = item.getDiscountLineDetail() != null
+											? item.getDiscountLineDetail().getDiscountPercent()
+											: BigDecimal.ZERO;
+								}
 							}
 							if (item.getDetailType() == LineDetailTypeEnum.SUB_TOTAL_LINE_DETAIL) {
 //							.value().equals("SUB_TOTAL_LINE_DETAIL")
@@ -526,8 +535,14 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 						facturaRepository.save(factura);
 
 //					Producto
+
+						System.out.println("DETALLE FACTURAAAAAAAAAAAAAAAAAAZ ");
 						List<Line> itemsRef = invoice.getLine();
 						Item itemProd = null;
+						System.out.println("NUMERO DE DETALLES " + itemsRef.size());
+						String JSONDETALLE = gson.toJson(itemsRef);
+
+						System.out.println("DETALLE FACTURAAAAAAAAAAAAAAAAAAZ " + JSONDETALLE);
 						int contadorLine = 0;
 						for (Line item : itemsRef) {
 							// detalle de factura
@@ -642,6 +657,16 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 										.divide(BigDecimal.valueOf(100));
 							}
 
+							if (item.getDetailType() == LineDetailTypeEnum.DISCOUNT_LINE_DETAIL) {
+								if (!item.getDiscountLineDetail().isPercentBased()) {
+
+									porcentajeDescuento = (valorDescuento.multiply(BigDecimal.valueOf(100))
+											.divide(valorTotalFact));
+									porcentajeDescuento = ArchivoUtils.redondearDecimales(porcentajeDescuento, 8);
+
+								}
+							}
+
 							BigDecimal precioConDescuento = precioUnitario.subtract(
 									precioUnitario.multiply(porcentajeDescuento).divide(BigDecimal.valueOf(100)));
 							BigDecimal cantidadProductos = item.getSalesItemLineDetail() != null
@@ -671,7 +696,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 							det.setDetTotalconiva(det.getDetTotal().multiply(cantidadProductos));
 
 							det.setDetIva(prodGrabaIva ? ivaDet : BigDecimal.ZERO);
-							det.setDetPordescuento(porcentajeDescuento);
+							det.setDetPordescuento(ArchivoUtils.redondearDecimales(porcentajeDescuento, 4));
 							det.setDetValdescuento(valorDescuento);
 							det.setDetSubtotaldescuento(precioConDescuento);
 							det.setDetTotaldescuento(valorDescuento.multiply(cantidadProductos));
