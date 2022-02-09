@@ -38,6 +38,7 @@ import com.ec.g2g.repository.TipoRetencionRepository;
 import com.ec.g2g.utilitario.ArchivoUtils;
 import com.google.gson.Gson;
 import com.intuit.ipp.data.Line;
+import com.intuit.ipp.data.MemoRef;
 import com.intuit.ipp.data.TaxCode;
 import com.intuit.ipp.data.TaxRate;
 import com.intuit.ipp.data.TaxRateDetail;
@@ -149,7 +150,8 @@ public class RetencionesQB {
 								.findByIdQuickOrRcoSecuencialText(Integer.valueOf(vendorCredit.getId()),
 										numeroRetencion, valoresGlobales.getTIPOAMBIENTE().getAmRuc());
 						if (!retencionValida.isPresent()) {
-							System.out.println("PROCESANDO RETENCION --> " + mapperVendorToRetencion(vendorCredit));
+							System.out.println(
+									"PROCESANDO RETENCION --> " + mapperVendorToRetencion(vendorCredit, service));
 						} else {
 							System.out.println("LA RETENCION YA EXISTE " + vendorCredit.getDocNumber().toUpperCase());
 
@@ -168,8 +170,9 @@ public class RetencionesQB {
 		}
 	}
 
-	private String mapperVendorToRetencion(VendorCredit vendorCredit) {
+	private String mapperVendorToRetencion(VendorCredit vendorCredit, DataService service) {
 		Gson gson = new Gson();
+
 		try {
 			/* CREAT PROVEEDOR */
 
@@ -284,7 +287,6 @@ public class RetencionesQB {
 			retencionCompra.setRcoSecuencialText(numeroRetencionText);
 			retencionCompra.setCodTipoambiente(valoresGlobales.getTIPOAMBIENTE());
 
-			
 			if (!claveAcceso.contains("null")) {
 				retencionCompraRepository.save(retencionCompra);
 			}
@@ -320,7 +322,8 @@ public class RetencionesQB {
 				// codigo de retenion
 				// verificar como se enviaria el codigo
 				// PARA EL CASO DEL IVA
-				if (detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA")) {
+				if (detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase()
+						.contains("IVA")) {
 
 					TipoRetencion tipoRetencion = tipoRetencionRepository.findByTireCodigo("001").get();
 					detalleRetencionCompra.setTireCodigo(tipoRetencion);
@@ -341,19 +344,21 @@ public class RetencionesQB {
 				}
 
 				// 1 ES RENTA 2 ES IVA
-				detalleRetencionCompra.setDrcCodImpuestoAsignado(
-						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA") ? "2"
-								: "1");
+				detalleRetencionCompra.setDrcCodImpuestoAsignado(detalleRet.getAccountBasedExpenseLineDetail()
+						.getAccountRef().getName().toUpperCase().contains("IVA") ? "2" : "1");
 
 				// dependiendo la funcionalidad lo llenamos
-				detalleRetencionCompra.setDrcDescripcion(
-						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA") ? "IVA"
-								: "RENTA");
-				detalleRetencionCompra.setDrcTipoRegistro(
-						detalleRet.getAccountBasedExpenseLineDetail().getAccountRef().getName().toUpperCase().contains("IVA") ? "IVA"
-								: "R");
+				detalleRetencionCompra.setDrcDescripcion(detalleRet.getAccountBasedExpenseLineDetail().getAccountRef()
+						.getName().toUpperCase().contains("IVA") ? "IVA" : "RENTA");
+				detalleRetencionCompra.setDrcTipoRegistro(detalleRet.getAccountBasedExpenseLineDetail().getAccountRef()
+						.getName().toUpperCase().contains("IVA") ? "IVA" : "R");
 				detalleRetencionCompraRepository.save(detalleRetencionCompra);
+
 			}
+
+			/* Cambia el secuencial en la plataforma de QuickBooks */
+			vendorCredit.setDocNumber(numeroRetencionText);
+			service.update(vendorCredit);
 
 		} catch (Exception e) {
 			// TODO: handle exception
