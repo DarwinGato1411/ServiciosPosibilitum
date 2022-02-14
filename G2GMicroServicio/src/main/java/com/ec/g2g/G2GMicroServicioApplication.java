@@ -450,10 +450,20 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 											: BigDecimal.ZERO;
 								}
 							}
+
 							if (item.getDetailType() == LineDetailTypeEnum.SUB_TOTAL_LINE_DETAIL) {
-//							.value().equals("SUB_TOTAL_LINE_DETAIL")
-								valorSinDescuento = item.getAmount();
+//								.value().equals("SUB_TOTAL_LINE_DETAIL")
+								valorSinDescuento = valorSinDescuento.add(item.getAmount());
 							}
+
+						}
+
+						if (porcentajeDescuento == BigDecimal.ZERO) {
+
+							porcentajeDescuento = (montoDescuento.multiply(BigDecimal.valueOf(100))
+									.divide(valorSinDescuento,8,RoundingMode.FLOOR));
+
+//							porcentajeDescuento = ArchivoUtils.redondearDecimales(porcentajeDescuento, 8);
 						}
 
 						subtotalFac = baseGrabada.add(baseCero);
@@ -657,15 +667,13 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 										.divide(BigDecimal.valueOf(100));
 							}
 
-							if (item.getDetailType() == LineDetailTypeEnum.DISCOUNT_LINE_DETAIL) {
-								if (!item.getDiscountLineDetail().isPercentBased()) {
-
-									porcentajeDescuento = (valorDescuento.multiply(BigDecimal.valueOf(100))
-											.divide(valorTotalFact));
-									porcentajeDescuento = ArchivoUtils.redondearDecimales(porcentajeDescuento, 8);
-
-								}
-							}
+//							if (item.getDetailType() == LineDetailTypeEnum.DISCOUNT_LINE_DETAIL) {
+//								if (!item.getDiscountLineDetail().isPercentBased()) {
+//
+//									valorDescuento = precioUnitario.multiply(porcentajeDescuento)
+//											.divide(BigDecimal.valueOf(100));
+//								}
+//							}
 
 							BigDecimal precioConDescuento = precioUnitario.subtract(
 									precioUnitario.multiply(porcentajeDescuento).divide(BigDecimal.valueOf(100)));
