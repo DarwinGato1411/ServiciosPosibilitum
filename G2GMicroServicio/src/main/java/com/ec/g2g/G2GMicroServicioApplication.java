@@ -461,7 +461,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 						if (porcentajeDescuento == BigDecimal.ZERO) {
 
 							porcentajeDescuento = (montoDescuento.multiply(BigDecimal.valueOf(100))
-									.divide(valorSinDescuento,8,RoundingMode.FLOOR));
+									.divide(valorSinDescuento, 8, RoundingMode.FLOOR));
 
 //							porcentajeDescuento = ArchivoUtils.redondearDecimales(porcentajeDescuento, 8);
 						}
@@ -559,14 +559,35 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 							det = new DetalleFactura();
 							contadorLine++;
 
-							if (item.getSalesItemLineDetail() == null) {
-								System.out.println("getSalesItemLineDetail NULL ");
-								break;
+							
+							if (item.getGroupLineDetail()!= null) {
+								if (item.getGroupLineDetail().getLine().get(0).getSalesItemLineDetail() == null) {
+									System.out.println("getSalesItemLineDetail NULL ");
+									break;
+								}
+							}else {
+								if (item.getSalesItemLineDetail() == null) {
+									System.out.println("getSalesItemLineDetail NULL ");
+									break;
+								}
+							}
+							
+
+							if (item.getGroupLineDetail() != null) {
+
+								
+									itemProd = getProduct(item.getGroupLineDetail().getGroupItemRef() != null
+											? item.getGroupLineDetail().getGroupItemRef().getValue()
+											: "0");
+							
+
+							} else {
+								itemProd = getProduct(item.getSalesItemLineDetail() != null
+										? item.getSalesItemLineDetail().getItemRef().getValue()
+										: "0");
+
 							}
 
-							itemProd = getProduct(item.getSalesItemLineDetail() != null
-									? item.getSalesItemLineDetail().getItemRef().getValue()
-									: "0");
 							String JSONPRODCUTO = gson.toJson(itemProd);
 
 							System.out.println("JSONPRODCUTO " + JSONPRODCUTO);
@@ -590,7 +611,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 							TaxRate taxRatePorcet = null;
 
 							TaxCode taxCode = taxCodeQB
-									.obtenerTaxCode(item.getSalesItemLineDetail().getTaxCodeRef().getValue());
+									.obtenerTaxCode(item.getGroupLineDetail()!=null?item.getGroupLineDetail().getLine().get(0).getSalesItemLineDetail().getTaxCodeRef().getValue(): item.getSalesItemLineDetail().getTaxCodeRef().getValue());
 
 							for (TaxRateDetail detail : taxCode.getSalesTaxRateList().getTaxRateDetail()) {
 //							JSONCLIENTE = gson.toJson(detail);
@@ -658,7 +679,8 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 								det.setIdProducto(producto);
 							}
 							// revision con Paul es el campo getUnitPrice
-							BigDecimal precioUnitario = item.getSalesItemLineDetail() != null
+							BigDecimal precioUnitario = item.getGroupLineDetail()!=null?item.getGroupLineDetail().getLine().get(0).getSalesItemLineDetail().getUnitPrice()
+									: item.getSalesItemLineDetail() != null
 									? item.getSalesItemLineDetail().getUnitPrice()
 									: BigDecimal.ZERO;
 							BigDecimal valorDescuento = BigDecimal.ZERO;
@@ -677,16 +699,18 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 
 							BigDecimal precioConDescuento = precioUnitario.subtract(
 									precioUnitario.multiply(porcentajeDescuento).divide(BigDecimal.valueOf(100)));
-							BigDecimal cantidadProductos = item.getSalesItemLineDetail() != null
+							BigDecimal cantidadProductos = item.getGroupLineDetail()!=null?item.getGroupLineDetail().getLine().get(0).getSalesItemLineDetail().getQty()
+									:item.getSalesItemLineDetail() != null
 									? item.getSalesItemLineDetail().getQty() != null
 											? item.getSalesItemLineDetail().getQty()
 											: BigDecimal.ONE
 									: BigDecimal.ONE;
 
 							det.setIdFactura(factura);
-							det.setDetCantidad(item.getSalesItemLineDetail().getQty() != null
-									? item.getSalesItemLineDetail().getQty()
-									: BigDecimal.ONE);
+							/*obtiene la cantidad dependiendo si es un item o grupo de items*/
+							BigDecimal cantidad=item.getGroupLineDetail()!=null?item.getGroupLineDetail().getLine().get(0).getSalesItemLineDetail().getQty()
+									: item.getSalesItemLineDetail().getQty();
+							det.setDetCantidad(cantidad);
 							det.setDetDescripcion(item.getDescription());
 							det.setDetSubtotal(precioUnitario);
 
