@@ -2,6 +2,7 @@ package com.ec.g2g.quickbook;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -112,6 +113,12 @@ public class RetencionesQB {
 			return;
 
 		}
+		Date fechaConsulta = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(fechaConsulta);
+		// reta loos dias que necesitas
+		c.add(Calendar.DATE, -5);
+		fechaConsulta = c.getTime();
 
 		String realmId = valoresGlobales.REALMID;
 		// String accessToken = valoresGlobales.TOKEN;
@@ -123,11 +130,12 @@ public class RetencionesQB {
 				String WHERE = "";
 				String ORDERBY = " ORDER BY Id ASC";
 				if (valoresGlobales.getTIPOAMBIENTE().getAmCargaInicial()) {
-					WHERE = " WHERE Id > '" + valoresGlobales.getTIPOAMBIENTE().getAmIdRetencionInicio() + "'";
-					// + "' AND MetaData.CreateTime >= '2021-11-04' ";
+					WHERE = " WHERE Id > '" + valoresGlobales.getTIPOAMBIENTE().getAmIdRetencionInicio() + "'"
+					
+					+ "'  AND MetaData.CreateTime >= '" + format.format(fechaConsulta) + "'";
 				} else {
 
-					WHERE = " WHERE MetaData.CreateTime >= '" + format.format(new Date()) + "'";
+					WHERE = " WHERE  AND MetaData.CreateTime >= ' "+ format.format(fechaConsulta) + "'";
 				}
 
 				String sql = "select * from vendorcredit ";
