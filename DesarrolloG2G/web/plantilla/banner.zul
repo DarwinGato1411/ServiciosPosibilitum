@@ -1,0 +1,47 @@
+   <zk>
+
+    <div class="fondoBanner" id="loginWin"  style="height:auto"  width="100%"
+         apply="com.ec.controlador.LogoutController" >
+        <div class="row" >
+            
+            <div class="col-12 col-sm-12 col-md-7 col-lg-7  " align="start">
+                <label value="POSIBILITUM" class="letraBannerFirst" />   
+                
+                     
+            </div>
+            <div class="col-12 col-sm-12 col-md-5 col-lg-5  " align="end" >
+                <div apply="org.zkoss.bind.BindComposer" 
+                     viewModel="@id('vm') @init('com.ec.controlador.MenuToolbar')" >
+                    <toolbar id="tb" height="30px"  style="background-color:#FFFFFF;" align="end" >
+                        <label value="Usuario: " if="${not sessionScope.userCredential.anonymous}" class="letraBannerFirst" />
+                        <label value="${sessionScope.usuario.nombreUsuario}"  if="${not sessionScope.userCredential.anonymous}" class="letraBannerFirst"  />    
+                        <label value="("  if="${not sessionScope.userCredential.anonymous}" class="letraBannerFirst"  />    )  
+                        <label value="${sessionScope.usuario.name}"  if="${not sessionScope.userCredential.anonymous}" class="letraBannerFirst"  />    
+                          <label value=")"  if="${not sessionScope.userCredential.anonymous}" class="letraBannerFirst"  />    )  
+                            <a sclass="logout labelLogout" id="logout" >  
+                                <label  value="Salir " style="padding-left: 5px;" if="${not sessionScope.userCredential.anonymous}" sclass=" labelLogout"/> 
+                                <image src="/iconos/logout-24.png"  />  
+                       
+                            </a>
+                    </toolbar>
+                </div>
+               
+            </div>
+        </div>
+        <div class="rows">
+            <div  viewModel="@id('vm')" id="gridMenu" apply="com.ec.controlador.MenuOpciones" 
+            class="col-12 col-sm-12 col-md-12 col-lg-12" >
+        
+                   <button label="Facturas" id="btnNotaVentas" class="btn letraBanner" />               
+                   <button label="Retenciones" id="btnRetenciones" class="btn letraBanner"/>
+                   <button label="Notas credito" id="btnNotaCredito" class="btn letraBanner"/>
+                   <button label="Liquidaciones de compra" id="btnLiquidacion" class="btn letraBanner"/>
+                   <button label="Catalogos" class="btn letraBanner" id="btnAdministarVenta"  />
+
+
+                </div>
+                
+        </div>
+        
+    </div>
+</zk>

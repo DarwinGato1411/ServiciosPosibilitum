@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/boostrap/bootstrap.css"?>  
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?init class="com.ec.seguridad.Autentificador"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/plantilla/plantilla.zul"?>
+<?link rel="icon" type="image/x-icon" href="/iconos/deckxel.ico"?>
+<zk  contentStyle="overflow:auto" with="100%" >
+    <hbox self="@define(content)" apply="org.zkoss.bind.BindComposer" 
+          viewModel="@id('vm') @init('com.ec.controlador.AdministrarVenta')" width="100%">
+        <tabbox id="tboxPrincipal"  width="100%">
+            <tabs >
+                <tab label="Configuraciones" sclass="menutabs" /> 
+                <!--<tab label="Parametrizar Empresa" sclass="menutabs" />--> 
+            </tabs>
+            <tabpanels >
+    
+                <tabpanel height="100%" hflex="min">
+                    <include src="/administrar/configuracion.zul"/>  
+                </tabpanel>
+<!--                <tabpanel height="100%" hflex="min">
+                    <include src="/administrar/parametrizar.zul"/>  
+                </tabpanel>-->
+            </tabpanels>
+            
+        </tabbox>
+    </hbox>
+
+
+</zk>

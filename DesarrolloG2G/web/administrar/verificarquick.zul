@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+    <window  id="windowVerificar"  position="center"
+             class="container-fluid col-12 col-sm-12 col-md-7 col-lg-7"             
+             height="98%" closable="true"  sizable="true" 
+             apply="org.zkoss.bind.BindComposer"  maximizable="true" 
+           
+             onCtrlKey="@command('cerrar')"
+             viewModel="@id('vm') @init('com.ec.controlador.VerificarQuickBook')" >
+        <caption label="Informes" style="font-weight:bold" >
+            <progressmeter id="pm" width="100px" style="align:rigth" value="100" onCancel="@command('cerrar')" />
+        </caption> 
+       
+         <a href="@bind(vm.link)" target="_blank">
+            <image id="" src="/imagenes/seguridad.png" width="100%"  height="100%"
+           />
+         </a> 
+
+    </window>
