@@ -193,7 +193,9 @@ public class Tipoambiente implements Serializable {
 
     @Column(name = "am_ripme")
     private Boolean amRipme;
-    
+    @Column(name = "am_contri_esp")
+    private Boolean contriEsp;
+
     public Tipoambiente() {
     }
 
@@ -386,7 +388,7 @@ public class Tipoambiente implements Serializable {
     }
 
     public String getLlevarContabilidad() {
-        return llevarContabilidad == null ? "NO" : "SI";
+        return llevarContabilidad == null ? "NO" : llevarContabilidad;
     }
 
     public void setLlevarContabilidad(String llevarContabilidad) {
@@ -620,7 +622,7 @@ public class Tipoambiente implements Serializable {
     }
 
     public Boolean getAmstadoPosibilitum() {
-        return amstadoPosibilitum==null?Boolean.FALSE:amstadoPosibilitum;
+        return amstadoPosibilitum == null ? Boolean.FALSE : amstadoPosibilitum;
     }
 
     public void setAmstadoPosibilitum(Boolean amstadoPosibilitum) {
@@ -636,15 +638,20 @@ public class Tipoambiente implements Serializable {
     }
 
     public Boolean getAmRipme() {
-        return amRipme==null?Boolean.FALSE:amRipme;
+        return amRipme == null ? Boolean.FALSE : amRipme;
     }
 
     public void setAmRipme(Boolean amRipme) {
         this.amRipme = amRipme;
     }
 
-  
-    
+    public Boolean getContriEsp() {
+        return contriEsp == null ? Boolean.FALSE : contriEsp;
+    }
+
+    public void setContriEsp(Boolean contriEsp) {
+        this.contriEsp = contriEsp;
+    }
 
     @Override
     public int hashCode() {

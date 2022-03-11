@@ -29,7 +29,7 @@
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4  form-group " align="center"  >
                    
                     <radiogroup class=" form-control form-control-sm" 
-                                selectedItem="@bind(vm.cargaInicial)" >
+                                selectedItem="@bind(vm.llevaContabilidad)" >
                         Lleva contabilidad:
                         <space bar="true"  />   
                         <radio label="NO" value="NO"  />
@@ -44,8 +44,8 @@
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4  form-group "  align="center" >
               
                     <radiogroup class="form-control form-control-sm " 
-                                selectedItem="@bind(vm.cargaInicial)" >
-                        Carga inicial:
+                                selectedItem="@bind(vm.esContribuyente)" >
+                        Es Contribuyente especial:
                         <space bar="true"  />                        
                         <radio label="SI" value="SI"/>
                         <space bar="true"  /> 

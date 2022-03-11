@@ -173,7 +173,7 @@ public class AutorizarDocumentos {
     public RespuestaComprobante autorizarComprobante(String claveDeAcceso) throws RespuestaAutorizacionException {
 
         try {
-            RespuestaComprobante repuesta = new AutorizacionComprobantesWs("https://" + tipoambiente.getAmUrlsri() +  "/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl").llamadaWSAutorizacionInd(claveDeAcceso);
+            RespuestaComprobante repuesta = new AutorizacionComprobantesWs("https://" + tipoambiente.getAmUrlsri() + "/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl").llamadaWSAutorizacionInd(claveDeAcceso);
             return repuesta;
         } catch (Exception ex) {
             RespuestaComprobante response = new RespuestaComprobante();
@@ -277,13 +277,13 @@ public class AutorizarDocumentos {
                     + "<infoFactura>\n"
                     + "        <fechaEmision>" + formato.format(valor.getFacFecha()) + "</fechaEmision>\n"
                     + "        <dirEstablecimiento>" + removeCaracteres(amb.getAmDireccionMatriz()) + "</dirEstablecimiento>\n"
-                    //   + "        <contribuyenteEspecial>0047</contribuyenteEspecial>\n"
+                    + (amb.getContriEsp() ? "        <contribuyenteEspecial>" + (amb.getContriEsp() ? amb.getAmNroContribuyente(): "") + "</contribuyenteEspecial>\n" : "")
                     + "        <obligadoContabilidad>" + amb.getLlevarContabilidad() + "</obligadoContabilidad>\n"
                     + "        <tipoIdentificacionComprador>" + valor.getIdCliente().getIdTipoIdentificacion().getTidCodigo() + "</tipoIdentificacionComprador>\n"
                     + "        <razonSocialComprador>" + removeCaracteres(valor.getIdCliente().getCliNombre()) + "</razonSocialComprador>\n"
                     + "        <identificacionComprador>" + valor.getIdCliente().getCliCedula() + "</identificacionComprador>\n"
                     + "        <totalSinImpuestos>" + ArchivoUtils.redondearDecimales(valor.getFacSubtotal(), 2) + "</totalSinImpuestos>\n"
-                    + "         <totalSubsidio>" + valor.getFacSubsidio().setScale(2, RoundingMode.FLOOR) + "</totalSubsidio>\n"
+                    + "        <totalSubsidio>" + valor.getFacSubsidio().setScale(2, RoundingMode.FLOOR) + "</totalSubsidio>\n"
                     + "        <totalDescuento>" + valor.getFacDescuento().setScale(2, RoundingMode.FLOOR) + "</totalDescuento>\n"
                     + "        <totalConImpuestos>\n"
                     + "            <totalImpuesto>\n"

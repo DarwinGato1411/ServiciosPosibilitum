@@ -62,6 +62,7 @@ public class Configuracion extends SelectorComposer<Component> {
     private String carpetaRaizSRI = "DOCUMENTOSRI";
     private String carpetaFirma = "FIRMA";
     private List<String> listaDicos = new ArrayList<String>();
+    private String esContribuyente = "NO";
 
     ServicioSriCatastro servicioSriCatastro = new ServicioSriCatastro();
     UserCredential credential = new UserCredential();
@@ -79,17 +80,20 @@ public class Configuracion extends SelectorComposer<Component> {
         tipoambiente = servicioTipoAmbiente.findByEstadoEmpresa(credential.getName());
 
         if (tipoambiente != null) {
+          llevaContabilidad =  tipoambiente.getLlevarContabilidad().equals("NO")?"NO":"SI";
             cargaInicial = tipoambiente.getAmCargaInicial() ? "SI" : "NO";
             parametrizar = servicioParametrizar.findALlParametrizarForRUC(credential.getName());
             if (parametrizar == null) {
                 parametrizar = new Parametrizar();
             }
             amCodifo = tipoambiente.getAmCodigo();
-            if (tipoambiente.getLlevarContabilidad().equals("NO")) {
-                llevaContabilidad = "NO";
-            } else {
-                llevaContabilidad = "SI";
-            }
+//            if (tipoambiente.getLlevarContabilidad().equals("NO")) {
+//                llevaContabilidad = "NO";
+//            } else {
+//                llevaContabilidad = "SI";
+//            }
+
+            esContribuyente = tipoambiente.getContriEsp() ? "SI" : "NO";
 
         }
 
@@ -105,6 +109,7 @@ public class Configuracion extends SelectorComposer<Component> {
             if (tipoambiente.getAmRuc().length() == 13) {
                 tipoambiente.setAmMicroEmp(Boolean.FALSE);
                 tipoambiente.setAmAgeRet(Boolean.FALSE);
+
                 tipoambiente.setAmContrEsp(Boolean.FALSE);
                 tipoambiente.setAmExp(Boolean.FALSE);
                 chkRM.setChecked(Boolean.FALSE);
@@ -210,7 +215,7 @@ public class Configuracion extends SelectorComposer<Component> {
     @Command
     @NotifyChange({"tipoambiente", "llevaContabilidad"})
     public void guardar() {
-        tipoambiente.setLlevarContabilidad(llevaContabilidad);
+//        tipoambiente.setLlevarContabilidad(llevaContabilidad);
         tipoambiente.setAmDirBaseArchivos(tipoambiente.getAmUnidadDisco() + File.separator + carpetaRaizSRI);
         tipoambiente.setAmDirReportes("REPORTES");
         tipoambiente.setAmGenerados("GENERADOS");
@@ -222,7 +227,9 @@ public class Configuracion extends SelectorComposer<Component> {
         tipoambiente.setAmNoAutorizados("NOAUTORIZADOS");
         tipoambiente.setAmTipoEmision("1");
         tipoambiente.setAmEnviocliente("ENVIARCLIENTE");
+        tipoambiente.setLlevarContabilidad(llevaContabilidad.equals("NO")?"NO":"SI");
         tipoambiente.setAmCargaInicial(cargaInicial.equals("SI") ? Boolean.TRUE : Boolean.FALSE);
+        tipoambiente.setContriEsp(esContribuyente.equals("SI") ? Boolean.TRUE : Boolean.FALSE);
         servicioTipoAmbiente.modificar(tipoambiente);
 
         parametrizar.setParContactoEmpresa(tipoambiente.getAmRazonSocial());
@@ -236,7 +243,7 @@ public class Configuracion extends SelectorComposer<Component> {
         parametrizar.setIsprincipal(Boolean.TRUE);
         parametrizar.setParDescuentoGeneral(BigDecimal.ZERO);
         parametrizar.setParCodigoIva("2");
-        parametrizar.setParIvaActual(BigDecimal.valueOf(12));       
+        parametrizar.setParIvaActual(BigDecimal.valueOf(12));
         servicioParametrizar.modificar(parametrizar);
 
         Clients.showNotification("Información registrada exitosamente",
@@ -318,6 +325,14 @@ public class Configuracion extends SelectorComposer<Component> {
 
     public void setCargaInicial(String cargaInicial) {
         this.cargaInicial = cargaInicial;
+    }
+
+    public String getEsContribuyente() {
+        return esContribuyente;
+    }
+
+    public void setEsContribuyente(String esContribuyente) {
+        this.esContribuyente = esContribuyente;
     }
 
 }
