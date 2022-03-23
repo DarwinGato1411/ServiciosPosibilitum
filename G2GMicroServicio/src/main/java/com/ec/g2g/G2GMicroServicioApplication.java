@@ -513,6 +513,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 						factura.setCodTipoambiente(valoresGlobales.getTIPOAMBIENTE());
 						factura.setFacSubsidio(BigDecimal.ZERO);
 						factura.setFacValorSinSubsidio(BigDecimal.ZERO);
+						/*saldo de la factura en balance*/
 
 						/* vendedor */
 						if (invoice.getCustomField().size() > 0) {
@@ -749,7 +750,7 @@ public class G2GMicroServicioApplication extends SpringBootServletInitializer {
 						/* Cambia el secuencial en la plataforma de QuickBooks */
 						invoice.setDocNumber(numeroFacturaTexto(numeroFactura));
 						invoice.setCustomerMemo(memoRef);
-						invoice.setAllowIPNPayment(Boolean.TRUE);
+//						invoice.setAllowIPNPayment(Boolean.TRUE);
 						/* actualizo la factura en QB */
 						service.update(invoice);
 					}

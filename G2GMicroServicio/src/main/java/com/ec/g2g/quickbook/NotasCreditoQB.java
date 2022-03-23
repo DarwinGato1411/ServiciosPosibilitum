@@ -1,9 +1,7 @@
 package com.ec.g2g.quickbook;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,44 +13,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ec.g2g.ModelIdentificacion;
-import com.ec.g2g.entidad.CabeceraCompra;
 import com.ec.g2g.entidad.DetalleNotaDebitoCredito;
-import com.ec.g2g.entidad.DetalleRetencionCompra;
-import com.ec.g2g.entidad.EstadoFacturas;
-import com.ec.g2g.entidad.Factura;
 import com.ec.g2g.entidad.NotaCreditoDebito;
-import com.ec.g2g.entidad.Proveedores;
-import com.ec.g2g.entidad.RetencionCompra;
-import com.ec.g2g.entidad.TipoIdentificacionCompra;
-import com.ec.g2g.entidad.TipoRetencion;
 import com.ec.g2g.entidad.Tipoambiente;
-import com.ec.g2g.entidad.Tipoivaretencion;
 import com.ec.g2g.global.ValoresGlobales;
-import com.ec.g2g.repository.CompraRepository;
 import com.ec.g2g.repository.DetalleNotaCreditoRepository;
-import com.ec.g2g.repository.DetalleRetencionCompraRepository;
-import com.ec.g2g.repository.EstadoFacturaRepository;
 import com.ec.g2g.repository.FacturaRepository;
 import com.ec.g2g.repository.NotaCreditoRepository;
-import com.ec.g2g.repository.ProveedorRepository;
-import com.ec.g2g.repository.RetencionCompraRepository;
 import com.ec.g2g.repository.TipoAmbienteRepository;
-import com.ec.g2g.repository.TipoIdentificacionCompraRepository;
-import com.ec.g2g.repository.TipoIvaRetencionRepository;
-import com.ec.g2g.repository.TipoRetencionRepository;
 import com.ec.g2g.utilitario.ArchivoUtils;
 import com.google.gson.Gson;
 import com.intuit.ipp.data.Line;
-import com.intuit.ipp.data.TaxCode;
-import com.intuit.ipp.data.TaxRate;
-import com.intuit.ipp.data.TaxRateDetail;
 import com.intuit.ipp.data.Vendor;
 import com.intuit.ipp.data.VendorCredit;
 import com.intuit.ipp.exception.FMSException;
 import com.intuit.ipp.services.DataService;
 import com.intuit.ipp.services.QueryResult;
-
-import ch.qos.logback.core.joran.conditional.IfAction;
 
 @Service
 public class NotasCreditoQB {
@@ -122,7 +98,7 @@ public class NotasCreditoQB {
 					WHERE = " WHERE MetaData.CreateTime >= '" + format.format(new Date()) + "'";
 				}
 
-				String sql = "select * from vendorcredit ";
+				String sql = "select * from creditmemos ";
 				String QUERYFINAL = sql + WHERE + ORDERBY;
 				System.out.println("QUERYFINAL " + QUERYFINAL);
 				QueryResult queryResult = service.executeQuery(QUERYFINAL);
