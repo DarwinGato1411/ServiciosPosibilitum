@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/boostrap/bootstrap.css"?>  
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?init class="com.ec.seguridad.Autentificador"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/plantillaadm/plantilla.zul"?>
+<?link rel="icon" type="image/x-icon" href="/iconos/deckxel.ico"?>
+<zk  contentStyle="overflow:auto" class="col-12 col-sm-12 col-md-12 col-lg-12" >
+    <style>
+        .z-textbox-readonly, .z-textbox-text-disd, .z-intbox-readonly, .z-intbox-text-disd, .z-longbox-readonly, .z-longbox-text-disd, .z-doublebox-readonly, .z-doublebox-text-disd, .z-decimalbox-readonly, .z-decimalbox-text-disd {
+        background: #f0f0f0;
+        border: 1px solid #e6e6e6;
+        border-top: 1px solid #b2b2b2;
+        height: 30px;
+        }
+        
+        [type="checkbox"], [type="radio"] {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 0;
+        margin-right: 5px;
+        }
+        
+        label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+    </style>
+ 
+    <hbox self="@define(content)" apply="org.zkoss.bind.BindComposer" 
+          viewModel="@id('vm') @init('com.ec.controlador.Administracion')" >
+        <tabbox  width="100%" >
+            <tabs >
+                <tab label="Estado de las empresas" sclass="menutabs" /> 
+            </tabs>
+            <tabpanels >
+                
+                <tabpanel  width="100%"  >                    
+                    
+                    <listbox model="@load(vm.listaEmpresas)" 
+                             nonselectableTags=""  mold="paging" pageSize="12"  >
+                        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+                    
+                        <listhead> 
+                            <listheader width="10%"  label="RUC" align="rigth" />  
+                            <listheader width="40%"  
+                                        sort="auto(amNombreComercial)">
+                                <textbox value="@bind(vm.amNombreComercial)"  
+                                         tooltiptext="Nombre empresa"
+                                         class="form-control form-control-sm"                                         
+                                         placeholder="Nombre de la empresa"
+                                         onOK="@command('buscarEmpresas')"
+                                         onChange="self.setValue(self.getValue().toUpperCase());" />
+                                
+                            </listheader>                                                        
+                            <listheader width="30%"  label="Direccion "  />
+                            <listheader width="10%"  label="Ambiente"  /> 
+                            <listheader width="10%"  label="RIMPE"  /> 
+                            <listheader width="10%"  label="Puerto"  /> 
+                            <listheader width="10%"  label="Estado" align="rigth" /> 
+                            <listheader width="3%"  label="" align="rigth" /> 
+                          
+
+                                  
+                        </listhead>  
+                        
+                    
+                        <template name="model">                                                            
+                            <listitem>
+                            
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true"  style="font-size:12px;background:#EBF5FB"  
+                                             class="form-control form-control-sm"                            
+                                             value="@bind(each.amRuc)" width="100%" />
+                                </listcell>
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true"  style="font-size:12px;background:#EBF5FB"  
+                                             class="form-control form-control-sm"                            
+                                             value="@bind(each.amNombreComercial)" width="100%" />
+                                </listcell>
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true" style="font-size:12px;background:#EBF5FB"  
+                                             class="form-control form-control-sm"                            
+                                             value="@bind(each.amDireccionSucursal)" width="100%" />
+                                </listcell>
+                             
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true"  style="font-size:12px;background:#EBF5FB" 
+                                             class="form-control form-control-sm"                             
+                                             value="@bind(each.amDescripcion)" width="100%" />
+                                </listcell>
+                                <listcell zclass = "mycss-listcell">
+                                   
+                                    <checkbox  label="RIMPE" 
+                                               checked="@bind(each.amRipme)" 
+                                               onCheck="@command('actualizaDatos',valor=each)" />
+                                </listcell>
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox  onOK="@command('actualizaDatos',valor=each)" 
+                                            
+                                              class="form-control form-control-sm"                            
+                                              value="@bind(each.amPuerto)" width="100%" />
+                                </listcell>
+                                <listcell if="${each.amstadoPosibilitum}"  style="background:#C7FEC1" zclass = "mycss-listcell">
+                                    <textbox   readonly="true"  style="font-size:12px;background:#C7FEC1" 
+                                               class="form-control form-control-sm"                             
+                                               value="ACTIVO" width="100%" />
+                                    
+                                </listcell>
+                                <listcell if="${!each.amstadoPosibilitum}" style="background:#E2C1F5" zclass = "mycss-listcell">
+                                    <textbox   readonly="true"  style="font-size:12px;background:#FFD4CB" 
+                                               class="form-control form-control-sm"                             
+                                               value="INACTIVO" width="100%" />
+                                </listcell>
+                                <listcell  zclass = "mycss-listcell" >   
+                                    <a if="${!each.amstadoPosibilitum}" 
+                                       onClick="@command('activarEmpresa',valor=each)">
+                                        <image  src="/iconos/Forward.png"   
+                                                height="30px"  
+                                            
+                                                class="btn-secondary btn-sm "       
+                                                tooltiptext="Activar empresa"/>
+                                    </a>
+                                    <image if="${each.amstadoPosibilitum}"  src="/iconos/listo_uno.png"   
+                                           height="30px"
+                                           class="btn-secondary btn-sm "       
+                                           tooltiptext="Empresa activa"/>
+                                </listcell> 
+                            
+                                       
+                            </listitem>
+                        </template>
+                    </listbox>
+                </tabpanel>
+                
+
+            </tabpanels>
+            
+        </tabbox>
+    </hbox>
+
+
+</zk>
