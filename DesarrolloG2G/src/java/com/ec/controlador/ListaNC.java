@@ -8,6 +8,8 @@ import com.ec.entidad.Cliente;
 import com.ec.entidad.Guiaremision;
 import com.ec.entidad.NotaCreditoDebito;
 import com.ec.entidad.Tipoambiente;
+import com.ec.seguridad.EnumSesion;
+import com.ec.seguridad.UserCredential;
 import com.ec.servicio.HelperPersistencia;
 import com.ec.servicio.ServicioCliente;
 import com.ec.servicio.ServicioGuia;
@@ -48,6 +50,8 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.image.AImage;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 
 /**
  *
@@ -72,17 +76,24 @@ public class ListaNC {
     private Tipoambiente amb = new Tipoambiente();
     private Date fechainicio = new Date();
     private Date fechafin = new Date();
+    UserCredential credential = new UserCredential();
 
     public ListaNC() {
-        consultarFactura();
-        amb = servicioTipoAmbiente.FindALlTipoambiente();
+        
+          Session sess = Sessions.getCurrent();
+        UserCredential cre = (UserCredential) sess.getAttribute(EnumSesion.userCredential.getNombre());
+        credential = cre;
+     
+        amb = servicioTipoAmbiente.findByEstadoEmpresa(credential.getName());
         //OBTIENE LAS RUTAS DE ACCESO A LOS DIRECTORIOS DE LA TABLA TIPOAMBIENTE
         PATH_BASE = amb.getAmDirBaseArchivos() + File.separator
                 + amb.getAmDirXml();
+        consultarFactura();
     }
 
     private void consultarFactura() {
-        lstCreditoDebitos = servicioNotaCredito.findBetweenFecha(fechainicio, fechafin);
+        lstCreditoDebitos=servicioNotaCredito.findInicio( amb.getCodTipoambiente());
+//        lstCreditoDebitos = servicioNotaCredito.findBetweenFecha(fechainicio, fechafin, amb.getCodTipoambiente());
     }
 
     public List<NotaCreditoDebito> getLstCreditoDebitos() {
@@ -212,7 +223,7 @@ public class ListaNC {
     }
 
     private void consultarFacturaFecha() {
-        lstCreditoDebitos = servicioNotaCredito.findBetweenFecha(fechainicio, fechafin);
+        lstCreditoDebitos = servicioNotaCredito.findBetweenFecha(fechainicio, fechafin, amb.getCodTipoambiente());
     }
     //GRAFICA POR UBICACION
     JFreeChart jfreechartMes;
@@ -695,4 +706,14 @@ public class ListaNC {
         }
 
     }
+
+    public UserCredential getCredential() {
+        return credential;
+    }
+
+    public void setCredential(UserCredential credential) {
+        this.credential = credential;
+    }
+    
+    
 }

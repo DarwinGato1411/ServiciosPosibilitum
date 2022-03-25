@@ -35,7 +35,7 @@ public class ServicioProveedor {
             em.persist(proveedores);
           em.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println("Error en insertar proveedores");
+            System.out.println("Error en insertar proveedores "+e.getMessage());
         } finally {
             em.close();
         }

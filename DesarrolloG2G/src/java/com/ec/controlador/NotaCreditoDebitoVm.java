@@ -176,16 +176,17 @@ public class NotaCreditoDebitoVm {
 //<editor-fold defaultstate="collapsed" desc="NOTA DE CREDITO">
 
     public NotaCreditoDebitoVm() {
-        amb = servicioTipoAmbiente.FindALlTipoambiente();
+         Session sess = Sessions.getCurrent();
+        UserCredential cre = (UserCredential) sess.getAttribute(EnumSesion.userCredential.getNombre());
+        credential = cre;
+            amb = servicioTipoAmbiente.findByEstadoEmpresa(credential.getName());
         //OBTIENE LAS RUTAS DE ACCESO A LOS DIRECTORIOS DE LA TABLA TIPOAMBIENTE
         PATH_BASE = amb.getAmDirBaseArchivos() + File.separator
                 + amb.getAmDirXml();
 
-        Session sess = Sessions.getCurrent();
-        UserCredential cre = (UserCredential) sess.getAttribute(EnumSesion.userCredential.getNombre());
-        credential = cre;
+      
         getDetallefactura();
-        parametrizar = servicioParametrizar.FindALlParametrizar();
+        parametrizar = servicioParametrizar.findAll();
         listaFormaPago = servicioFormaPago.FindALlFormaPago();
         formaPagoSelected = servicioFormaPago.finPrincipal();
 
@@ -882,6 +883,7 @@ public class NotaCreditoDebitoVm {
 
                 //  parametros.put("codUsuario", String.valueOf(credentialLog.getAdUsuario().getCodigoUsuario()));
                 parametros.put("numfactura", numeroFactura);
+                parametros.put("codTipoAmbiente", amb);
 
                 if (con != null) {
                     System.out.println("Conexión Realizada Correctamenteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");

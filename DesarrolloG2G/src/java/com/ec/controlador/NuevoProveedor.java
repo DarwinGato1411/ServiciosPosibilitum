@@ -18,6 +18,7 @@ import org.zkoss.bind.annotation.ExecutionArgParam;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
@@ -47,7 +48,7 @@ public class NuevoProveedor {
         } else {
             this.proveedor = new Proveedores();
             accion = "create";
-             identificacionCompra = null;
+            identificacionCompra = null;
         }
         cargarTipoIdentificacion();
 
@@ -59,20 +60,34 @@ public class NuevoProveedor {
 
     @Command
     public void guardar() {
+
         if (proveedor.getProvCedula() != null
-                && proveedor.getProvNombre() != null
-                && proveedor.getProvTelefono() != null
-                && proveedor.getProvDireccion() != null
-                && identificacionCompra != null) {
+                    && proveedor.getProvNombre() != null
+                    && proveedor.getProvTelefono() != null
+                    && proveedor.getProvDireccion() != null
+                    && proveedor.getProvCorreo()!= null
+                    && identificacionCompra != null) {
+
             proveedor.setIdTipoIdentificacionCompra(identificacionCompra);
+            proveedor.setProvMovil("0999999999");
+//            proveedor.setProvCorreo("posibilitum@gmail.com");
+            proveedor.setProvNomComercial(proveedor.getProvNombre());
+            proveedor.setProvPagina("www.posibilitum.com");
+            proveedor.setProvNumeroCuenta("");
+            proveedor.setProvTipoCuenta("");
             if (accion.equals("create")) {
+                if (servicioProveedor.findProvCedula(proveedor.getProvCedula()) != null) {
+                    Clients.showNotification("El proveedor ya se encuentra registrado...!",
+                                Clients.NOTIFICATION_TYPE_ERROR, null, "middle_center", 2000, true);
+                    return;
+                }
                 servicioProveedor.crear(proveedor);
-               // Messagebox.show("Guardado con exito");
+                // Messagebox.show("Guardado con exito");
 
                 windowCliente.detach();
             } else {
                 servicioProveedor.modificar(proveedor);
-               // Messagebox.show("Guardado con exito");
+                // Messagebox.show("Guardado con exito");
 
                 windowCliente.detach();
             }

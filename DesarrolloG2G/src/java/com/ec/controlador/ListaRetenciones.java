@@ -87,9 +87,11 @@ public class ListaRetenciones {
         Session sess = Sessions.getCurrent();
         UserCredential cre = (UserCredential) sess.getAttribute(EnumSesion.userCredential.getNombre());
         credential = cre;
-        buscarInicio();
+     
         amb = servicioTipoAmbiente.findByEstadoEmpresa(credential.getName());
+           buscarInicio();
         //OBTIENE LAS RUTAS DE ACCESO A LOS DIRECTORIOS DE LA TABLA TIPOAMBIENTE
+        
         PATH_BASE = amb.getAmDirBaseArchivos() + File.separator
                 + amb.getAmDirXml();
     }
@@ -733,6 +735,14 @@ public class ListaRetenciones {
         map.put("valor", valor.getIdCabecera().getIdProveedor());
         org.zkoss.zul.Window window = (org.zkoss.zul.Window) Executions.createComponents(
                 "/nuevo/proveedor.zul", null, map);
+        window.doModal();
+
+    }
+    
+    @Command
+    public void nuevoProveedor() {       
+        org.zkoss.zul.Window window = (org.zkoss.zul.Window) Executions.createComponents(
+                "/nuevo/proveedor.zul", null, null);
         window.doModal();
 
     }

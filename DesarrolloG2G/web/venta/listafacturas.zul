@@ -106,6 +106,7 @@
                             <listheader width="3%"  label="" align="rigth" />        
                             <listheader width="3%"  label="" align="rigth" />        
                             <listheader width="3%"  label="" align="rigth" />        
+                            <!--<listheader width="3%"  label="" align="rigth" />-->        
 
                                   
                         </listhead>  
@@ -255,6 +256,24 @@
                                                tooltiptext="Ya se encuentra autorizado"/>
                                     </listcell>
                                 </zk>
+                                  <zk if="${each.estadosri!='AUTORIZADO'}"  > 
+                                    <listcell  zclass = "mycss-listcell" >   
+                                        <image src="/iconos/listo_uno.png"   
+                                               height=" 30px"  
+                                               class="  btn-secondary btn-sm "       
+                                               tooltiptext="Ya se encuentra autorizado"/>
+                                    </listcell>
+                                </zk>
+<!--                                 <zk if="${each.estadosri=='AUTORIZADO'}"  > 
+                                     <listcell  zclass = "mycss-listcell" >   
+                                        
+                                    <image src="/iconos/notacredito.png"  
+                                       height=" 30px"   
+                                           onClick="@command('crearNotaCredito',valor=each)"                                    
+                                           class="btn btn btn-secondary btn-sm grow"                                               
+                                           tooltiptext="Generar Nota de Crédito"/> 
+                                </listcell>
+                                  </zk>-->
                                 <listcell  zclass = "mycss-listcell" >   
                                     <image src="/iconos/email.png"   
                                            height="30px"  

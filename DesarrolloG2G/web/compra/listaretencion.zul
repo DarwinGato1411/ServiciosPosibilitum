@@ -51,6 +51,13 @@
                                                   tooltiptext="Descargar"/>
 
                                     </div>
+<!--                                    <div  class="col-12 col-sm-12 col-md-3 col-lg-3 ">
+                                        <button   src="/iconos/Boss.png"   
+                                                  onClick="@command('nuevoProveedor')"  
+                                                  class="btn btn-primary btn-sm "
+                                                  tooltiptext="Descargar"/>
+
+                                    </div>-->
 
                                 </div>
                                 

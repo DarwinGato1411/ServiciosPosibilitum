@@ -37,15 +37,31 @@
             
            
             <div class="col-12 col-sm-12 col-md-4 col-lg-4  form-group "  >
-                <label value="(*) " style="color:red;font-weight:bold"/>Telefono Convencional:
+                <label value="(*) " style="color:red;font-weight:bold"/>Telefono:
                 
                 <textbox  maxlength="100"
                           value="@bind(vm.proveedor.provTelefono)" 
                           
                           class="form-control" />
             </div>
+              <div class="col-12 col-sm-12 col-md-8 col-lg-8  form-group "  >
+                <label value="(*) "  style="color:red;font-weight:bold"/>Dirección:
+               
+                <textbox id="txtDireccion" maxlength="100" 
+                         value="@bind(vm.proveedor.provDireccion)" 
+                         onChange="self.setValue(self.getValue().toUpperCase());" 
+                          
+                         class="form-control" />
+            </div>  
+             <div class="col-12 col-sm-12 col-md-6 col-lg-6  form-group "  >
+                <label value="(*)" style="color:transparent;font-weight:bold"/>Correo:
+              
+                <textbox  maxlength="100" 
+                          value="@bind(vm.proveedor.provCorreo)"
+                          class="form-control" />
+            </div>
             
-            <div class="col-12 col-sm-12 col-md-4 col-lg-4  form-group "  >
+<!--            <div class="col-12 col-sm-12 col-md-4 col-lg-4  form-group "  >
                 <label value="(*)" style="color:transparent;font-weight:bold"/>Telefono Celular:
               
                 <textbox  maxlength="10"  
@@ -55,23 +71,9 @@
             
       
            
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6  form-group "  >
-                <label value="(*) "  style="color:red;font-weight:bold"/>Dirección:
+            
                
-                <textbox id="txtDireccion" maxlength="100" 
-                         value="@bind(vm.proveedor.provDireccion)" 
-                         onChange="self.setValue(self.getValue().toUpperCase());" 
-                          
-                         class="form-control" />
-            </div>    
-               
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6  form-group "  >
-                <label value="(*)" style="color:transparent;font-weight:bold"/>Correo:
-              
-                <textbox  maxlength="100" 
-                          value="@bind(vm.proveedor.provCorreo)"
-                          class="form-control" />
-            </div>
+           
             <div class="col-12 col-sm-12 col-md-6 col-lg-6  form-group "  >
                 <label value="(*)" style="color:transparent;font-weight:bold"/>Pagina web:
               
@@ -100,7 +102,7 @@
                           value="@bind(vm.proveedor.provNumeroCuenta)"
                           class="form-control" />
             </div>
-                     
+                     -->
             <div class="col-12 col-sm-12 col-md-12 col-lg-12  form-group" align="center" >
                     
                 <image src="/iconos/guardar.png"  

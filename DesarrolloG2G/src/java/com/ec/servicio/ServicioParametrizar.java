@@ -72,6 +72,30 @@ public class ServicioParametrizar {
 
     }
 
+        public Parametrizar findAll() {
+
+        List<Parametrizar> listaParametrizars = new ArrayList<Parametrizar>();
+        Parametrizar parametrizar = null;
+        try {
+            //Connection connection = em.unwrap(Connection.class);
+            em = HelperPersistencia.getEMF();
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT p FROM Parametrizar p WHERE p.isprincipal=TRUE");
+//           query.setParameter("parRucEmpresa", parametrizar);
+//           query.setParameter("codigoUsuario", parametrizar);
+            listaParametrizars = (List<Parametrizar>) query.getResultList();
+            if (listaParametrizars.size() > 0) {
+                parametrizar = listaParametrizars.get(0);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("Error en la consulta FindALlParametrizar parametrizar " + e.getMessage());
+        } finally {
+            em.close();
+        }
+
+        return parametrizar;
+    }
     public Parametrizar FindALlParametrizar() {
 
         List<Parametrizar> listaParametrizars = new ArrayList<Parametrizar>();

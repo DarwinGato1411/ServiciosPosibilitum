@@ -474,16 +474,39 @@ public class ServicioNotaCredito {
         return listaNotaCreditoDebitos;
     }
 
-    public List<NotaCreditoDebito> findBetweenFecha(Date inicio, Date fin) {
+    public List<NotaCreditoDebito> findBetweenFecha(Date inicio, Date fin, Integer codTipoambiente) {
 
         List<NotaCreditoDebito> listaNotaCreditoDebitos = new ArrayList<NotaCreditoDebito>();
         try {
             //Connection connection = em.unwrap(Connection.class);
             em = HelperPersistencia.getEMF();
             em.getTransaction().begin();
-            Query query = em.createQuery("SELECT a FROM NotaCreditoDebito a WHERE a.facFecha BETWEEN :inicio AND :fin ORDER BY a.facFecha DESC");
+            Query query = em.createQuery("SELECT a FROM NotaCreditoDebito a WHERE a.facFecha BETWEEN :inicio AND :fin and a.codTipoambiente=:codTipoambiente ORDER BY a.facFecha DESC");
+            query.setParameter("codTipoambiente", codTipoambiente);
             query.setParameter("inicio", inicio);
             query.setParameter("fin", fin);
+            query.setMaxResults(400);
+            listaNotaCreditoDebitos = (List<NotaCreditoDebito>) query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("Error en lsa consulta notaCreditoDebito " + e.getMessage());
+        } finally {
+            em.close();
+        }
+
+        return listaNotaCreditoDebitos;
+    }
+    public List<NotaCreditoDebito> findInicio(Integer codTipoambiente) {
+
+        List<NotaCreditoDebito> listaNotaCreditoDebitos = new ArrayList<NotaCreditoDebito>();
+        try {
+            //Connection connection = em.unwrap(Connection.class);
+            em = HelperPersistencia.getEMF();
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT a FROM NotaCreditoDebito a WHERE a.codTipoambiente=:codTipoambiente ORDER BY a.facFecha DESC");
+            query.setParameter("codTipoambiente", codTipoambiente);
+//            query.setParameter("inicio", inicio);
+//            query.setParameter("fin", fin);
             query.setMaxResults(400);
             listaNotaCreditoDebitos = (List<NotaCreditoDebito>) query.getResultList();
             em.getTransaction().commit();

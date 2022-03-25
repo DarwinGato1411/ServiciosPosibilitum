@@ -240,28 +240,43 @@
                     <intbox value="@bind(vm.tipoambiente.amIdFacturaInicio)"   
                             placeholder="123"                                                    
                             class="form-control form-control-sm"
-                            tooltiptext="Id factura para cargar los documentos" />
+                            tooltiptext="Id factura para cargar los documentos (MAYOR)" />
                 </div> 
                 <div class="col-12 col-sm-12 col-md-2 col-lg-2  form-group "  >
                    
                     <intbox value="@bind(vm.tipoambiente.amSecuencialInicio)"   
                             placeholder="1"                                                    
                             class="form-control form-control-sm"
-                            tooltiptext="Secuencial de inicio de las facturas para los documentos electronicos" />
+                            tooltiptext="Secuencial de inicio de las facturas para los documentos electronicos (INICIA EN ESTE NUMERO)" />
                 </div> 
                 <div class="col-12 col-sm-12 col-md-2 col-lg-2  form-group "  >
                    
                     <intbox value="@bind(vm.tipoambiente.amIdRetencionInicio)"   
                             placeholder="1"                                                    
                             class="form-control form-control-sm"
-                            tooltiptext="Id de retencion para cargar los documentos" />
+                            tooltiptext="Id de retencion para cargar los documentos (MAYOR)" />
                 </div> 
                 <div class="col-12 col-sm-12 col-md-2 col-lg-2  form-group "  >
                    
                     <intbox value="@bind(vm.tipoambiente.amSecuencialInicioRetencion)"   
                             placeholder="1"                                                    
                             class="form-control form-control-sm"
-                            tooltiptext="Secuencial  de inicio de las retenciones para los documentos electronicos" />
+                            tooltiptext="Secuencial  de inicio de las retenciones para los documentos electronicos (INICIA EN ESTE NUMERO)" />
+                </div> 
+                
+                  <div class="col-12 col-sm-12 col-md-2 col-lg-2  form-group "  >
+                   
+                    <intbox value="@bind(vm.tipoambiente.amIdNcInicio)"   
+                            placeholder="1"                                                    
+                            class="form-control form-control-sm"
+                            tooltiptext="Id de nota de credito para cargar los documentos (MAYOR)" />
+                </div> 
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2  form-group "  >
+                   
+                    <intbox value="@bind(vm.tipoambiente.amSecuencialInicioNc)"   
+                            placeholder="1"                                                    
+                            class="form-control form-control-sm"
+                            tooltiptext="Secuencial  de inicio de las notas de credito para los documentos electronicos (INICIA EN ESTE NUMERO)" />
                 </div> 
                 
                 

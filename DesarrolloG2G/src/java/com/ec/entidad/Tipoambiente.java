@@ -195,6 +195,14 @@ public class Tipoambiente implements Serializable {
     private Boolean amRipme;
     @Column(name = "am_contri_esp")
     private Boolean contriEsp;
+    
+    
+      /*nota credito*/
+    @Column(name = "am_id_nc_inicio")
+    private Integer amIdNcInicio;
+
+    @Column(name = "am_secuencial_inicio_nc")
+    private Integer amSecuencialInicioNc;
 
     public Tipoambiente() {
     }
@@ -651,6 +659,22 @@ public class Tipoambiente implements Serializable {
 
     public void setContriEsp(Boolean contriEsp) {
         this.contriEsp = contriEsp;
+    }
+
+    public Integer getAmIdNcInicio() {
+        return amIdNcInicio;
+    }
+
+    public void setAmIdNcInicio(Integer amIdNcInicio) {
+        this.amIdNcInicio = amIdNcInicio;
+    }
+
+    public Integer getAmSecuencialInicioNc() {
+        return amSecuencialInicioNc;
+    }
+
+    public void setAmSecuencialInicioNc(Integer amSecuencialInicioNc) {
+        this.amSecuencialInicioNc = amSecuencialInicioNc;
     }
 
     @Override

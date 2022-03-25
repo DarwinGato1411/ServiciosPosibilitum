@@ -30,10 +30,14 @@ public class ServicioEstadoFactura {
 
         try {
             em = HelperPersistencia.getEMF();
-          em.getTransaction().begin();
+            em.getTransaction().begin();
             em.persist(estadoFacturas);
-          em.getTransaction().commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
+
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
             System.out.println("Error en insertar estadoFacturas");
         } finally {
             em.close();
@@ -45,11 +49,9 @@ public class ServicioEstadoFactura {
 
         try {
             em = HelperPersistencia.getEMF();
-          em.getTransaction().begin();
+            em.getTransaction().begin();
             em.remove(em.merge(estadoFacturas));
-          em.getTransaction().commit();
-
-
+            em.getTransaction().commit();
 
         } catch (Exception e) {
             System.out.println("Error en eliminar  estadoFacturas" + e);
@@ -63,9 +65,9 @@ public class ServicioEstadoFactura {
 
         try {
             em = HelperPersistencia.getEMF();
-          em.getTransaction().begin();
+            em.getTransaction().begin();
             em.merge(estadoFacturas);
-          em.getTransaction().commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Error en insertar estadoFacturas");
         } finally {
@@ -80,11 +82,11 @@ public class ServicioEstadoFactura {
         try {
             //Connection connection = em.unwrap(Connection.class);
             em = HelperPersistencia.getEMF();
-          em.getTransaction().begin();
+            em.getTransaction().begin();
             Query query = em.createNamedQuery("EstadoFacturas.findAll", EstadoFacturas.class);
 //           query.setParameter("codigoUsuario", estadoFacturas);
             listaEstadoFacturass = (List<EstadoFacturas>) query.getResultList();
-          em.getTransaction().commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Error en lsa consulta estadoFacturas");
         } finally {
@@ -100,11 +102,11 @@ public class ServicioEstadoFactura {
         try {
             //Connection connection = em.unwrap(Connection.class);
             em = HelperPersistencia.getEMF();
-          em.getTransaction().begin();
+            em.getTransaction().begin();
             Query query = em.createNamedQuery("EstadoFacturas.findByEstCodigo", EstadoFacturas.class);
             query.setParameter("estCodigo", buscar);
             listaEstadoFacturass = (EstadoFacturas) query.getSingleResult();
-          em.getTransaction().commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Error en lsa consulta estadoFacturas");
         } finally {
