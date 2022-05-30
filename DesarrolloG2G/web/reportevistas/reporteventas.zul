@@ -6,16 +6,16 @@
 <?link rel="icon" type="image/x-icon" href="/iconos/deckxel.ico"?>
 <zk  contentStyle="overflow:auto" with="100%" >
     <hbox self="@define(content)" apply="org.zkoss.bind.BindComposer" 
-          viewModel="@id('vm') @init('com.ec.controlador.ListaVentaPromedio')" width="100%">
+          viewModel="@id('vm') @init('com.ec.controlador.ReporteVentasSaldos')" width="100%">
         <tabbox id="tboxPrincipal"  width="100%">
             <tabs >
-                <tab label="Lista de compras" sclass="menutabs" /> 
+                <tab label="Facturas y saldos" sclass="menutabs" /> 
             </tabs>
             <tabpanels >
                 
                 <tabpanel  height="98%" width="99%"  >                    
                    
-                    <listbox model="@load(vm.listaPromedio)" 
+                    <listbox model="@load(vm.listaDatos)" 
                              nonselectableTags=""  mold="paging" pageSize="12"  >
                         <custom-attributes org.zkoss.zul.listbox.rod="true"/>
                         <auxhead>
@@ -39,20 +39,30 @@
                                                    buttonVisible="true" 
                                                    lenient="true"  format="dd/MM/yyyy" 
                                                    constraint="no empty: IBuscar por fecha fin de la busqueda"/> 
-                                        <button   image="/imagenes/buscar1.png"  
-                                                  onClick="@command('buscarForFechas')"  
+                                        <button   image="/imagenes/buscar1.png" 
+                                                  autodisable="self" 
+                                                  onClick="@command('obtenerFacturas')"  
                                                   class="btn btn-primary btn-sm "
                                                   tooltiptext="Buscar"/>
                        
                                     </div>
                                     <div  class="col-12 col-sm-12 col-md-3 col-lg-3 ">
                                         <button   image="/imagenes/excel.png"  
+                                                  autodisable="self"
                                                   onClick="@command('exportListboxToExcel')"  
                                                   class="btn btn-primary btn-sm "
                                                   tooltiptext="Descargar"/>
 
                                     </div>
-                                    
+                                    <div  class="col-12 col-sm-12 col-md-3 col-lg-3 " align="end">
+                                        <button   image="/imagenes/procesar.gif" 
+                                                  label="Obtener datos de Quick Books" 
+                                                  autodisable="self"
+                                                  onClick="@command('procesarDatos')"  
+                                                  class="btn btn-primary btn-sm "
+                                                  tooltiptext="Procesar"/>
+
+                                    </div>
                                     
 
                                 </div>
@@ -61,52 +71,84 @@
                         </auxhead>
                        
                         <listhead> 
-                            <listheader width="55%"  label="Producto" >
-                               
-                            </listheader> 
-                            <listheader width="15%"  label="Fecha" />    
-                            <listheader width="15%"  label="Cantidad" />        
-                            <listheader width="15%"  label="Precio actual" />        
-                            <listheader width="15%"  label="Precio promedio" />        
+                            <listheader width="10%"  label="Fecha" />    
+                            <listheader width="10%"  label="Fecha vencimiento" />        
+                            <listheader width="10%"  label="N°" />        
+                            <listheader width="15%"  label="Empresa" />        
+                            <listheader width="15%"  label="Producto/Servicio" />        
+                            <listheader width="10%"  label="Importe Sujeto impuesto" />        
+                            <listheader width="10%"  label="Importe del impuesto" />        
+                            <listheader width="10%"  label="Total" />        
+                            <listheader width="10%"  label="Saldo total" />        
                                                                 
                         </listhead>  
                         
                     
                         <template name="model">                                                            
                             <listitem>
-                                <listcell zclass = "mycss-listcell">
-                                  <textbox readonly="true" style="font-size:12px ;background:#EBF5FB"
-                                           class="form-control form-control-sm" 
-                                           value="@bind(each.prodNombre)" />
-                                </listcell>
+                                
                                 <listcell zclass = "mycss-listcell" style="font-size:12px;background:#F8F9F9">
                                     <datebox style="font-size:12px"
-                                              class=" form-control-sm" 
-                                             value="@bind(each.fecha)" 
+                                             class=" form-control-sm" 
+                                             value="@bind(each.facFecha)" 
                                              buttonVisible="false" 
                                              lenient="true" 
                                              format="medium"   />
                                 </listcell>
+                                
+                                <listcell zclass = "mycss-listcell" style="font-size:12px;background:#F8F9F9">
+                                    <datebox style="font-size:12px"
+                                             class=" form-control-sm" 
+                                             value="@bind(each.facFechaVencimiento)" 
+                                             buttonVisible="false" 
+                                             lenient="true" 
+                                             format="medium"   />
+                                </listcell>
+                              
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true" style="font-size:12px ;background:#EBF5FB"
+                                             class="form-control form-control-sm" 
+                                             value="@bind(each.facNumeroText)" />
+                                </listcell>
+                                
+                                    
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true" style="font-size:12px ;background:#EBF5FB"
+                                             class="form-control form-control-sm" 
+                                             value="@bind(each.facCliente)" />
+                                </listcell>
+                                <listcell zclass = "mycss-listcell">
+                                    <textbox readonly="true" style="font-size:12px ;background:#EBF5FB"
+                                             class="form-control form-control-sm" 
+                                             value="@bind(each.facProducto)" />
+                                </listcell>                          
                                 <listcell zclass = "mycss-listcell">
                                     <decimalbox style="font-size:12px ;background:#EBF5FB"
                                                 class="form-control form-control-sm" 
                                                 format="###.##" 
                                                 readonly="true"  
-                                                value="@bind(each.cantidad)" />
+                                                value="@bind(each.facImporteSujetoImpuesto)" />
                                 </listcell>
                                 <listcell zclass = "mycss-listcell">
                                     <decimalbox style="font-size:12px ;background:#EBF5FB"
                                                 class="form-control form-control-sm" 
                                                 format="###.##" 
                                                 readonly="true"  
-                                                value="@bind(each.precioActual)"  />
+                                                value="@bind(each.facImporteImpuesto)" />
+                                </listcell>
+                                <listcell zclass = "mycss-listcell">
+                                    <decimalbox style="font-size:12px ;background:#EBF5FB"
+                                                class="form-control form-control-sm" 
+                                                format="###.##" 
+                                                readonly="true"  
+                                                value="@bind(each.facTotal)"  />
                                 </listcell>                                                                
                                 <listcell zclass = "mycss-listcell">
                                     <decimalbox style="font-size:12px ;background:#EBF5FB"
                                                 class="form-control form-control-sm" 
                                                 format="###.##" 
                                                 readonly="true"  
-                                                value="@bind(each.precio)"  />
+                                                value="@bind(each.facSaldoTotal)"  />
                                 </listcell>                                                                
                                 
                             </listitem>

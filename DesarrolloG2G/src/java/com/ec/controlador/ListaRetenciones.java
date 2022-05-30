@@ -12,6 +12,7 @@ import com.ec.seguridad.EnumSesion;
 import com.ec.seguridad.UserCredential;
 import com.ec.servicio.HelperPersistencia;
 import com.ec.servicio.ServicioCompra;
+import com.ec.servicio.ServicioFacturaReporte;
 import com.ec.servicio.ServicioRetencionCompra;
 import com.ec.servicio.ServicioTipoAmbiente;
 import com.ec.untilitario.ArchivoUtils;

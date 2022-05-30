@@ -8,6 +8,7 @@ import com.ec.entidad.Acumuladoventas;
 import com.ec.entidad.CabeceraCompra;
 import com.ec.servicio.ServicioAcumuladoVentas;
 import com.ec.servicio.ServicioCompra;
+import com.ec.servicio.ServicioFacturaReporte;
 import com.ec.servicio.ServicioDetalleCompra;
 import com.ec.servicio.ServicioFactura;
 import com.ec.untilitario.GenerarATS;

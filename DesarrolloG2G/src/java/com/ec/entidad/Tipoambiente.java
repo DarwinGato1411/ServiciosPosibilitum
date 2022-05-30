@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -48,6 +49,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Tipoambiente.findByAmNoAutorizados", query = "SELECT t FROM Tipoambiente t WHERE t.amNoAutorizados = :amNoAutorizados")
     , @NamedQuery(name = "Tipoambiente.findByAmClaveAccesoSri", query = "SELECT t FROM Tipoambiente t WHERE t.amClaveAccesoSri = :amClaveAccesoSri")})
 public class Tipoambiente implements Serializable {
+
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -195,14 +197,22 @@ public class Tipoambiente implements Serializable {
     private Boolean amRipme;
     @Column(name = "am_contri_esp")
     private Boolean contriEsp;
-    
-    
-      /*nota credito*/
+
+    /*nota credito*/
     @Column(name = "am_id_nc_inicio")
     private Integer amIdNcInicio;
 
     @Column(name = "am_secuencial_inicio_nc")
     private Integer amSecuencialInicioNc;
+    
+        @Size(max = 50)
+    @Column(name = "am_imagenes")
+    private String amImagenes;
+    @Column(name = "am_numero_consult_public")
+    private Short amNumeroConsultPublic;
+    @OneToMany(mappedBy = "codTipoambiente")
+    private Collection<FacturaReporte> facturaReporteCollection;
+
 
     public Tipoambiente() {
     }
@@ -428,7 +438,8 @@ public class Tipoambiente implements Serializable {
     }
 
     public String getAmNroContribuyente() {
-        return amNroContribuyente;
+
+        return amNroContribuyente == null ? "" : amNroContribuyente;
     }
 
     public void setAmNroContribuyente(String amNroContribuyente) {
@@ -700,6 +711,31 @@ public class Tipoambiente implements Serializable {
     @Override
     public String toString() {
         return "com.ec.entidad.Tipoambiente[ codTipoambiente=" + codTipoambiente + " ]";
+    }
+
+    public String getAmImagenes() {
+        return amImagenes;
+    }
+
+    public void setAmImagenes(String amImagenes) {
+        this.amImagenes = amImagenes;
+    }
+
+    public Short getAmNumeroConsultPublic() {
+        return amNumeroConsultPublic;
+    }
+
+    public void setAmNumeroConsultPublic(Short amNumeroConsultPublic) {
+        this.amNumeroConsultPublic = amNumeroConsultPublic;
+    }
+
+    @XmlTransient
+    public Collection<FacturaReporte> getFacturaReporteCollection() {
+        return facturaReporteCollection;
+    }
+
+    public void setFacturaReporteCollection(Collection<FacturaReporte> facturaReporteCollection) {
+        this.facturaReporteCollection = facturaReporteCollection;
     }
 
 }

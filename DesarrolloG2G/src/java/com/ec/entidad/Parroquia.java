@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Parroquia.findByParrKiloAdicional", query = "SELECT p FROM Parroquia p WHERE p.parrKiloAdicional = :parrKiloAdicional")})
 public class Parroquia implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -163,6 +164,8 @@ public class Parroquia implements Serializable {
     public String toString() {
         return "com.ec.entidad.Parroquia[ idParroquia=" + idParroquia + " ]";
     }
+
+ 
 
 
 }

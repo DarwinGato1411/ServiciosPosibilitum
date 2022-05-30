@@ -6,8 +6,9 @@ package com.ec.controlador;
 
 import com.ec.entidad.CabeceraCompra;
 import com.ec.entidad.Factura;
-
 import com.ec.servicio.ServicioCompra;
+
+import com.ec.servicio.ServicioFacturaReporte;
 
 import com.ec.servicio.ServicioFactura;
 import com.ec.servicio.ServicioGeneral;

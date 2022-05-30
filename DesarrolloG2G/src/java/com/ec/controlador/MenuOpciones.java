@@ -281,6 +281,10 @@ public class MenuOpciones extends SelectorComposer<Component> {
     public void btnCodigoRetenciones() {
             Executions.sendRedirect("/bienvenido/codigoretenciones.zul");
     }
+    @Listen("onClick = #btnReporteVenta")
+    public void btnReporteVenta() {
+            Executions.sendRedirect("/reportevistas/reporteventas.zul");
+    }
 
     @Command
     public void facturar(@BindingParam("valor") DetalleFacturaDAO valor) {

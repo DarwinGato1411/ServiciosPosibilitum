@@ -122,16 +122,16 @@
                                 </listcell>
                                 
                                 
-                                <zk if="${each.estadosri=='PENDIENTE'}"  > 
+                                <zk if="${each.estadosri!='AUTORIZADO'}"  > 
                                     <listcell zclass = "mycss-listcell">    
                                         <image  src="/iconos/sri24x24.png" 
                                                 class="grow"
                                                 onClick="@command('autorizarSRI',valor=each)" 
-                                                tooltiptext="Autorizar guia"/>
+                                                tooltiptext="Autorizar nota de credito"/>
                                     </listcell>
                                 </zk>
                            
-                                <zk if="${each.estadosri!='PENDIENTE'}"  >
+                                <zk if="${each.estadosri=='AUTORIZADO'}"  >
                                     <listcell zclass = "mycss-listcell">                                         
                                         <image src="/iconos/listo_uno.png"   
                                                class="grow "       
@@ -152,7 +152,7 @@
                                         <image  src="/iconos/reenviar.png" 
                                                   class="grow"
                                                   onClick="@command('reenviarSRI',valor=each)" 
-                                                  tooltiptext="Reenviar su factura a autorizar"/>
+                                                  tooltiptext="Reenviar  a autorizar"/>
                                         <!--                                        <image src="/iconos/listo_uno.png"   
                                         class="btn-secondary btn-sm"                                               
                                         tooltiptext="No se puede autorizar por que se encuentra en estado autorizado"/> -->

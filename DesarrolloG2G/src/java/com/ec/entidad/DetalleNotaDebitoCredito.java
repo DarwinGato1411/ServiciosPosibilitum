@@ -113,15 +113,19 @@ public class DetalleNotaDebitoCredito implements Serializable {
     @ManyToOne
     private NotaCreditoDebito idNota;
 
+    @Column(name = "codigo_producto")
+    private String codigoProducto;
+    @Column(name = "prod_graba_iva")
+    private Boolean prodGrabaIva;
     public DetalleNotaDebitoCredito() {
     }
 
     public DetalleNotaDebitoCredito(BigDecimal detCantidad,
-            String detDescripcion,
-            BigDecimal detSubtotal,
-            BigDecimal detTotal,
-            Producto idProducto,
-            NotaCreditoDebito idNota) {
+                String detDescripcion,
+                BigDecimal detSubtotal,
+                BigDecimal detTotal,
+                Producto idProducto,
+                NotaCreditoDebito idNota) {
         this.detCantidad = detCantidad;
         this.detDescripcion = detDescripcion;
         this.detSubtotal = detSubtotal;
@@ -131,11 +135,11 @@ public class DetalleNotaDebitoCredito implements Serializable {
     }
 
     public DetalleNotaDebitoCredito(BigDecimal detCantidad,
-            String detDescripcion,
-            BigDecimal detSubtotal,
-            BigDecimal detTotal,
-            Producto idProducto,
-            NotaCreditoDebito idNota, String detTipoVenta) {
+                String detDescripcion,
+                BigDecimal detSubtotal,
+                BigDecimal detTotal,
+                Producto idProducto,
+                NotaCreditoDebito idNota, String detTipoVenta) {
         this.detCantidad = detCantidad;
         this.detDescripcion = detDescripcion;
         this.detSubtotal = detSubtotal;
@@ -291,6 +295,21 @@ public class DetalleNotaDebitoCredito implements Serializable {
 
     public void setIdNota(NotaCreditoDebito idNota) {
         this.idNota = idNota;
+    }
+
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+  public Boolean getProdGrabaIva() {
+        return prodGrabaIva;
+    }
+
+    public void setProdGrabaIva(Boolean prodGrabaIva) {
+        this.prodGrabaIva = prodGrabaIva;
     }
 
     @Override

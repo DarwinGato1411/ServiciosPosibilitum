@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.4641000000000015"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="161"/>
+	<property name="ireport.y" value="401"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -532,7 +532,7 @@ where factura.fac_numero=$P{numfactura} and factura.cod_tipoambiente= $P{codTipo
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="123" y="314" width="426" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{cli_direccion}]]></textFieldExpression>
@@ -679,11 +679,11 @@ where factura.fac_numero=$P{numfactura} and factura.cod_tipoambiente= $P{codTipo
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8"/>
 								</textElement>
-								<text><![CDATA[Precio Unitario]]></text>
+								<text><![CDATA[Valor Unitario]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="15" rowSpan="1">
-							<textField pattern="###0.00">
+							<textField pattern="###0.00000">
 								<reportElement x="0" y="0" width="60" height="15"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8"/>
@@ -1121,7 +1121,7 @@ where factura.fac_numero=$P{numfactura} and factura.cod_tipoambiente= $P{codTipo
 				<text><![CDATA[Fecha de pago:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="11" y="279" width="100" height="14"/>
+				<reportElement positionType="Float" x="14" y="172" width="100" height="14"/>
 				<box leftPadding="2"/>
 				<textElement>
 					<font size="9"/>
@@ -1129,7 +1129,9 @@ where factura.fac_numero=$P{numfactura} and factura.cod_tipoambiente= $P{codTipo
 				<text><![CDATA[Nota:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="10" y="174" width="100" height="20"/>
+				<reportElement positionType="Float" x="9" y="214" width="100" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 				<box leftPadding="2"/>
 				<textElement>
 					<font size="9"/>
@@ -1137,7 +1139,9 @@ where factura.fac_numero=$P{numfactura} and factura.cod_tipoambiente= $P{codTipo
 				<text><![CDATA[Legal:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="110" y="174" width="267" height="103"/>
+				<reportElement x="110" y="214" width="267" height="103">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
 				<box leftPadding="2"/>
 				<textElement textAlignment="Justified">
 					<font size="9"/>
@@ -1145,7 +1149,7 @@ where factura.fac_numero=$P{numfactura} and factura.cod_tipoambiente= $P{codTipo
 				<textFieldExpression class="java.lang.String"><![CDATA["Debo(emos) y pagaré(emos) incondicional e irrevocablemente en el plazo  señalado en la presente Factura, en el lugar que se reconvenga, a la orden del emisor,la suma establecida que en este acto acepto: "+$F{fac_total}.setScale(2, RoundingMode.FLOOR)+"(USD). En caso de mora me (nos) obligo (amos) a pagar el máximo interés moratorio vigente a la fecha en que se produzca el vencimiento de la obligación hasta su total cancelación; así como los gasto judiciales, extrajudiciales y honorarios profesionales que demande el cobro de esta factura."]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="110" y="279" width="267" height="40" isPrintWhenDetailOverflows="true"/>
+				<reportElement positionType="Float" x="109" y="174" width="267" height="40" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2"/>
 				<textElement>
 					<font size="9"/>

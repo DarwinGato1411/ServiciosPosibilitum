@@ -611,6 +611,7 @@ public class ListaFacturas {
 //                                    amb, foldervoAutorizado);
 
                             fEnvio = new File(archivoEnvioCliente);
+                           
 
                             System.out.println("PATH DEL ARCHIVO PARA ENVIAR AL CLIENTE " + archivoEnvioCliente);
                             ArchivoUtils.reporteGeneralPdfMail(archivoEnvioCliente.replace(".xml", ".pdf"), valor.getFacNumero(), "FACT",amb);
@@ -634,6 +635,8 @@ public class ListaFacturas {
                                         "Gracias por preferirnos se ha emitido nuestra factura electrónica",
                                         attachFiles,
                                         "FACTURACION ELECTRONICA", valor.getFacClaveAcceso(), amb);
+                                
+                                /*llama al web services envio-docuentos*/
                             }
                         }
 

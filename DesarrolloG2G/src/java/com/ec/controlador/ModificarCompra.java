@@ -18,6 +18,7 @@ import com.ec.entidad.Tipokardex;
 import com.ec.seguridad.EnumSesion;
 import com.ec.seguridad.UserCredential;
 import com.ec.servicio.ServicioCompra;
+import com.ec.servicio.ServicioFacturaReporte;
 import com.ec.servicio.ServicioDetalleCompra;
 import com.ec.servicio.ServicioDetalleKardex;
 import com.ec.servicio.ServicioEstadoFactura;

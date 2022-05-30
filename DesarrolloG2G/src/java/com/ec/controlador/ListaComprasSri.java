@@ -17,6 +17,7 @@ import com.ec.seguridad.EnumSesion;
 import com.ec.seguridad.UserCredential;
 import com.ec.servicio.ServicioCabeceraComprasSri;
 import com.ec.servicio.ServicioCompra;
+import com.ec.servicio.ServicioFacturaReporte;
 import com.ec.servicio.ServicioComprasSri;
 import com.ec.servicio.ServicioDetalleCompra;
 import com.ec.servicio.ServicioDetalleComprasSri;

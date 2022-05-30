@@ -88,6 +88,8 @@ public class Usuario implements Serializable {
     private Collection<CabeceraCompraSri> cabeceraCompraSriCollection;
     @OneToMany(mappedBy = "idUsuario")
     private Collection<OrdenTrabajo> ordenTrabajoCollection;
+    @OneToMany(mappedBy = "idUsuario")
+    private Collection<FacturaReporte> facturaReporteCollection;
 
     public Usuario() {
     }
@@ -203,6 +205,16 @@ public class Usuario implements Serializable {
         this.ordenTrabajoCollection = ordenTrabajoCollection;
     }
 
+    public Collection<FacturaReporte> getFacturaReporteCollection() {
+        return facturaReporteCollection;
+    }
+
+    public void setFacturaReporteCollection(Collection<FacturaReporte> facturaReporteCollection) {
+        this.facturaReporteCollection = facturaReporteCollection;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;

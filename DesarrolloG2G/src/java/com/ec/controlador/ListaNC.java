@@ -676,6 +676,7 @@ public class ListaNC {
             Map<String, Object> parametros = new HashMap<String, Object>();
 
             //  parametros.put("codUsuario", String.valueOf(credentialLog.getAdUsuario().getCodigoUsuario()));
+            parametros.put("codTipoAmbiente", valor.getCodTipoambiente());
             parametros.put("numfactura", valor.getFacNumero());
 
             if (con != null) {

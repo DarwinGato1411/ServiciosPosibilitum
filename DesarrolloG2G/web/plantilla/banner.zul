@@ -35,6 +35,7 @@
                    <button label="Facturas" id="btnNotaVentas" class="btn letraBanner" />               
                    <button label="Retenciones" id="btnRetenciones" class="btn letraBanner"/>
                    <button label="Notas de credito" id="btnNotaCredito" class="btn letraBanner"/>
+                   <button label="Reporte de ventas" id="btnReporteVenta" class="btn letraBanner"/>
                    <!--<button label="Liquidaciones de compra" id="btnLiquidacion" class="btn letraBanner"/>-->
                    <button label="Catalogos" class="btn letraBanner" id="btnAdministarVenta"  />
 

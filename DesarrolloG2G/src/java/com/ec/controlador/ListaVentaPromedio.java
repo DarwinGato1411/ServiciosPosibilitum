@@ -6,7 +6,7 @@ package com.ec.controlador;
 
 import com.ec.entidad.Tipoambiente;
 import com.ec.servicio.ServicioAcumuladoVentas;
-import com.ec.servicio.ServicioCompra;
+import com.ec.servicio.ServicioFacturaReporte;
 import com.ec.servicio.ServicioDetalleCompra;
 import com.ec.servicio.ServicioFactura;
 import com.ec.servicio.ServicioTipoAmbiente;
@@ -45,7 +45,7 @@ public class ListaVentaPromedio {
     ServicioTipoAmbiente servicioTipoAmbiente = new ServicioTipoAmbiente();
     private Tipoambiente amb = new Tipoambiente();
     ServicioDetalleCompra servicioDetalleCompra = new ServicioDetalleCompra();
-    ServicioCompra servicioCompra = new ServicioCompra();
+    ServicioFacturaReporte servicioCompra = new ServicioFacturaReporte();
     ServicioFactura servicioFactura = new ServicioFactura();
 
     ServicioAcumuladoVentas servicioAcumuladoVentas = new ServicioAcumuladoVentas();
