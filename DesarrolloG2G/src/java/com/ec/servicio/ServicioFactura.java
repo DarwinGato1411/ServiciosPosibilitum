@@ -8,6 +8,7 @@ import com.ec.dao.DetalleFacturaDAO;
 import com.ec.entidad.Cliente;
 import com.ec.entidad.DetalleFactura;
 import com.ec.entidad.Factura;
+import com.ec.entidad.Tipoambiente;
 import com.ec.entidad.Usuario;
 import com.ec.untilitario.CompraPromedio;
 import com.ec.untilitario.Totales;
@@ -436,7 +437,7 @@ public class ServicioFactura {
             em = HelperPersistencia.getEMF();
             em.getTransaction().begin();
             Query query = em.createQuery("SELECT f FROM Factura f WHERE f.facNumero > 0 AND f.facTipo='FACT' AND f.codTipoambiente.amRuc=:amRuc ORDER BY f.facNumero DESC");
-            query.setMaxResults(400);
+            query.setMaxResults(1000);
             query.setParameter("amRuc", RUC);
             listaFacturas = (List<Factura>) query.getResultList();
             em.getTransaction().commit();
@@ -1153,6 +1154,46 @@ public class ServicioFactura {
             em = HelperPersistencia.getEMF();
             em.getTransaction().begin();
             Query query = em.createQuery("SELECT a FROM Factura a WHERE a.estadosri='PENDIENTE' AND a.facTipo='FACT' AND a.codTipoambiente.amRuc=:amRuc  ORDER BY a.idFactura ASC");
+            listaFacturas = (List<Factura>) query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("Error en lsa consulta factura " + e.getMessage());
+        } finally {
+            em.close();
+        }
+
+        return listaFacturas;
+    }
+    
+    public List<Factura> findPendientesEnviarSRITipoAmbiente(Tipoambiente amb) {
+
+        List<Factura> listaFacturas = new ArrayList<Factura>();
+        try {
+            //Connection connection = em.unwrap(Connection.class);
+            em = HelperPersistencia.getEMF();
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT a FROM Factura a WHERE a.estadosri='PENDIENTE' AND a.facTipo='FACT' AND a.codTipoambiente=:amb  ORDER BY a.idFactura ASC");
+            query.setParameter("amb", amb);
+            listaFacturas = (List<Factura>) query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("Error en lsa consulta factura " + e.getMessage());
+        } finally {
+            em.close();
+        }
+
+        return listaFacturas;
+    }
+    
+     public List<Factura> findDevueltaEnviarSRITipoAmbiente(Tipoambiente amb) {
+
+        List<Factura> listaFacturas = new ArrayList<Factura>();
+        try {
+            //Connection connection = em.unwrap(Connection.class);
+            em = HelperPersistencia.getEMF();
+            em.getTransaction().begin();
+            Query query = em.createQuery("SELECT a FROM Factura a WHERE a.estadosri='DEVUELTA' AND a.facTipo='FACT' AND a.codTipoambiente=:amb  ORDER BY a.idFactura ASC");
+            query.setParameter("amb", amb);
             listaFacturas = (List<Factura>) query.getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {

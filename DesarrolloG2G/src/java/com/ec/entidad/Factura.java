@@ -232,6 +232,9 @@ public class Factura implements Serializable {
     @JoinColumn(name = "id_referencia", referencedColumnName = "id_referencia")
     @ManyToOne
     private Referencia idReferencia;
+    
+    @Column(name = "txn_id")
+    private Integer txnId;
 
     public Factura() {
     }
@@ -756,6 +759,16 @@ public class Factura implements Serializable {
     public void setFacSecuencialUnico(String facSecuencialUnico) {
         this.facSecuencialUnico = facSecuencialUnico;
     }
+
+    public Integer getTxnId() {
+        return txnId;
+    }
+
+    public void setTxnId(Integer txnId) {
+        this.txnId = txnId;
+    }
+    
+    
 
     @XmlTransient
     public Collection<Guiaremision> getGuiaremisionCollection() {

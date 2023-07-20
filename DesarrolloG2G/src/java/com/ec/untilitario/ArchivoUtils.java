@@ -399,12 +399,18 @@ public class ArchivoUtils {
 
             File currentDirFile = new File(".");
             String helper = currentDirFile.getAbsolutePath();
+            String sutaPlit[]=helper.split("domain1");
+            System.out.println("sutaPlit[0] " + sutaPlit[0]);
             String currentDir = helper.substring(0, helper.length() - currentDirFile.getCanonicalPath().length());
             System.out.println("helper " + helper);
             System.out.println("currentDir " + currentDir);
-
-            String reportFile = Executions.getCurrent().getDesktop().getWebApp()
-                    .getRealPath("/reportes");
+            
+            String reportFile = "/home/payara41/glassfish/domains/domain1/applications/defact/reportes";
+//            String reportFile = sutaPlit[0]+File.separator+"domain1/applications/defact/reportes";
+//            
+//            String reportFile = Executions.getCurrent().getDesktop().getWebApp()
+//                    .getRealPath("/reportes");
+            System.out.println("reportFile "+reportFile);
             String reportPath = "";
             emf.getTransaction().begin();
             con = emf.unwrap(Connection.class);
@@ -703,7 +709,7 @@ public class ArchivoUtils {
         return retorno;
     }
 
-    public static void reporteGeneralPdfMailWS(String pathPDF, Integer numeroFactura, String tipo) throws JRException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, NamingException {
+    public static void reporteGeneralPdfMailWS(String pathPDF, Integer numeroFactura, String tipo, Tipoambiente amb) throws JRException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, NamingException {
         EntityManager emf = HelperPersistencia.getEMF();
         Connection con = null;
         try {
@@ -729,7 +735,9 @@ public class ArchivoUtils {
             Map<String, Object> parametros = new HashMap<String, Object>();
 
             //  parametros.put("codUsuario", String.valueOf(credentialLog.getAdUsuario().getCodigoUsuario()));
+             //  parametros.put("codUsuario", String.valueOf(credentialLog.getAdUsuario().getCodigoUsuario()));
             parametros.put("numfactura", numeroFactura);
+             parametros.put("codTipoAmbiente",amb.getCodTipoambiente());
 
             if (con != null) {
                 System.out.println("Conexión Realizada Correctamenteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");

@@ -150,7 +150,7 @@
                                 <div class="col-4 col-sm-4 col-md-3 col-lg-3  form-group hidden-sm-down"  >
                                     <label value="" style="color:red;font-weight:bold"/>Plazo:
                 
-                                    <combobox onSelect="@command('actualizarCostoVenta')"  
+                                    <combobox
                                               readonly="true"    
                                               style="width:150px"                                    
                                               selectedItem="@bind(vm.facplazo)" >
@@ -167,100 +167,6 @@
                                             value="@bind(vm.totalItems)"  >
                                     </label>
                                 </div>
-<!--                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"                                                                                                  
-                                                 placeholder="Placa"
-                                                 value="@bind(vm.facPlaca)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"                                                 
-                                              
-                                                 placeholder="Marca"
-                                                 value="@bind(vm.facMarca)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <decimalbox format="####" class="font-weight:bold form-control form-control-sm"                                                 
-                                                 
-                                                 placeholder="Anio"
-                                                 value="@bind(vm.facAnio)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"                                                 
-                                                
-                                                 placeholder="Cilindraje"
-                                                 value="@bind(vm.facCilindraje)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"                                                 
-                                                
-                                                 placeholder="Kilometraje"
-                                                 value="@bind(vm.facKilometraje)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"                                                 
-                                              
-                                                 placeholder="Chasis"
-                                                 value="@bind(vm.facChasis)"  />
-                                    </div>-->
-                                  
-
-                                        
-                         
-                                
-                           
-                           
-                                
-                            
-<!--                                <div class="col-4 col-sm-4 col-md-2 col-lg-2  form-group hidden-sm-down"  >
-                                    <label value="" style="color:red;font-weight:bold"/>T Ven
-                
-                                    <combobox onSelect="@command('actualizarCostoVenta')"  
-                                              readonly="true"    
-                                              style="width:110px"                                    
-                                              selectedItem="@bind(vm.clietipo)" >
-                                        <comboitem label="PRECIO VENTA PUBLICO" value="0" />                    
-                                        <comboitem label="PRECIO POR MAYOR" value="1" />
-                                        <comboitem label="PRECIO POR CAJA" value="2" />
-                                    </combobox>
-                                </div>-->
-                            
-<!--                                <div class="row col-12 col-sm-12 col-md-12 col-lg-12 " style="margin-bottom:5px"  >
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"   
-                                                 maxlength="12"                                                                                                
-                                                 placeholder="Guia madre"
-                                                 value="@bind(vm.facMadre)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm"         
-                                                 maxlength="12"                                                                                            
-                                                 placeholder="Guia hija"
-                                                 value="@bind(vm.facHija)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 "   >
-                                        <textbox class="font-weight:bold form-control form-control-sm" 
-                                                 maxlength="50"                                                                                                    
-                                                 placeholder="Destino"
-                                                 onChange="self.setValue(self.getValue().toUpperCase())"
-                                                 value="@bind(vm.facDestino)"  />
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-3 col-lg-3 form-group hidden-sm-down">
-                                        <label  style="color:red;font-weight:bold" value=""  ></label>Referencia:
-                                        
-                                        <combobox  model="@load(vm.listaReferencia)"  
-                                                   selectedItem="@bind(vm.referenciaSelected)" 
-                                                   style="width:150px"  
-                                                   readonly="true" >
-                                            <template name="model">
-                                                <comboitem  label="@bind(each.refNombre)"/>
-                                            </template>                                      
-                                        </combobox>
-                                    </div>
-
-                                </div> -->
-                               
-                                
-                              
                                 <!--hidden-sm-down-->
                                 <div class="col-12 col-sm-12 col-md-5 col-lg-5 " >
                                     <listbox model="@load(vm.listaKardexProducto)" 

@@ -70,6 +70,7 @@
                             <listheader width="5%"  label="" align="center" />        
                             <listheader width="5%"  label="" align="center" />        
                             <listheader width="5%"  label="" align="center" />               
+                            <listheader width="5%"  label="" align="center" />               
                         </listhead>  
                         
                     
@@ -158,7 +159,14 @@
                                         tooltiptext="No se puede autorizar por que se encuentra en estado autorizado"/> -->
                                     </listcell>
                                 </zk>
-                                                            
+                                     <listcell zclass = "mycss-listcell" style="font-size:12px;background:#F8F9F9"> 
+                                    <image src="/iconos/pdfrep2.png" 
+                                           class="grow"
+                                           onClick="@command('enviarPDF',valor=each)" 
+                                           tooltiptext="Enviar PDF a Quick Books"/>
+                                    
+                                   
+                                </listcell>                           
                                 
                             </listitem>
                         </template>

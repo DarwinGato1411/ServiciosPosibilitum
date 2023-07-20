@@ -91,6 +91,7 @@
                             <listheader width="5%"  label="" />             
                             <listheader width="5%"  label="" />             
                             <listheader width="5%"  label="" />             
+                            <listheader width="5%"  label="" />             
                         </listhead>  
                         
                     
@@ -216,6 +217,14 @@
                                            src="/iconos/listo_uno.png"   
                                            class="grow"                                               
                                            tooltiptext="No se puede reenviar por que se encuentra en estado autorizado"/> 
+                                </listcell>
+                                <listcell zclass = "mycss-listcell" style="font-size:12px;background:#F8F9F9"> 
+                                    <image src="/iconos/pdfrep2.png" 
+                                           class="grow"
+                                           onClick="@command('enviarPDF',valor=each)" 
+                                           tooltiptext="Enviar PDF a Quick Books"/>
+                                    
+                                   
                                 </listcell>
                                 
                                

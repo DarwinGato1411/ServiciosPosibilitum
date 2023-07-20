@@ -59,5 +59,43 @@ public class ServiciosRest {
 
         return respuesta;
     }
+    
+    
+     @GET
+    @Path("/reenvio/{ruc}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RespuestaDocumentos getReenviarFacturas(@PathParam("ruc") String ruc) {
+        System.out.println("RUC "+ruc);
+        RespuestaDocumentos respuesta = new RespuestaDocumentos("PROCESO CORRECTO", "VALIDO");
+        ProcesarDocumentos documentos = new ProcesarDocumentos(ruc);
+        try {
+
+            System.out.println("INGRESA LA SERVICIO DE FACTURAS");
+            respuesta.setDescripcion(documentos.reenviarEnLote());
+        } catch (IOException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        } catch (ClassNotFoundException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        } catch (IllegalAccessException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        } catch (InstantiationException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        } catch (SQLException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        } catch (NamingException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        } catch (JRException e) {
+            respuesta.setDescripcion(e.getMessage());
+            respuesta.setEstado("ERROR");
+        }
+
+        return respuesta;
+    }
 
 }

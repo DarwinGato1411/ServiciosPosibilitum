@@ -82,7 +82,6 @@ public class Cliente implements Serializable {
     @Size(max = 20)
     @Column(name = "cli_movil")
     private String cliMovil;
-    @Size(max = 100)
     @Column(name = "cli_correo")
     private String cliCorreo;
     @Size(max = 100)

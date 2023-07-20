@@ -123,7 +123,8 @@ public class RetencionCompra implements Serializable {
     @JoinColumn(name = "cod_tipoambiente", referencedColumnName = "cod_tipoambiente")
     @ManyToOne
     private Tipoambiente codTipoambiente;
-
+   @Column(name = "id_quick")
+    private Integer idQuick;
     public RetencionCompra() {
     }
 
@@ -305,6 +306,16 @@ public class RetencionCompra implements Serializable {
         this.rcoMsmInfoSri = rcoMsmInfoSri;
     }
 
+    public Integer getIdQuick() {
+        return idQuick;
+    }
+
+    public void setIdQuick(Integer idQuick) {
+        this.idQuick = idQuick;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;

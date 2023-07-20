@@ -46,6 +46,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -53,6 +54,8 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -60,6 +63,7 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Messagebox;
 
@@ -88,13 +92,13 @@ public class ListaRetenciones {
         Session sess = Sessions.getCurrent();
         UserCredential cre = (UserCredential) sess.getAttribute(EnumSesion.userCredential.getNombre());
         credential = cre;
-     
+
         amb = servicioTipoAmbiente.findByEstadoEmpresa(credential.getName());
-           buscarInicio();
+        buscarInicio();
         //OBTIENE LAS RUTAS DE ACCESO A LOS DIRECTORIOS DE LA TABLA TIPOAMBIENTE
-        
+
         PATH_BASE = amb.getAmDirBaseArchivos() + File.separator
-                + amb.getAmDirXml();
+                    + amb.getAmDirXml();
     }
 
     private void buscarInicio() {
@@ -170,25 +174,25 @@ public class ListaRetenciones {
     @Command
     @NotifyChange({"listaRetencionCompras"})
     public void autorizarSRI(@BindingParam("valor") RetencionCompra valor)
-            throws JRException, IOException, NamingException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+                throws JRException, IOException, NamingException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         String folderGenerados = PATH_BASE + File.separator + amb.getAmGenerados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
         String folderEnviarCliente = PATH_BASE + File.separator + amb.getAmEnviocliente()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
         String folderFirmado = PATH_BASE + File.separator + amb.getAmFirmados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
 
         String foldervoAutorizado = PATH_BASE + File.separator + amb.getAmAutorizados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
 
         String folderNoAutorizados = PATH_BASE + File.separator + amb.getAmNoAutorizados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
 
         /*EN EL CASO DE NO EXISTIR LOS DIRECTORIOS LOS CREA*/
         File folderGen = new File(folderGenerados);
@@ -217,9 +221,9 @@ public class ListaRetenciones {
 
  /*PARA CREAR EL ARCHIVO XML FIRMADO*/
         String nombreArchivoXML = File.separator + "RET-"
-                + amb.getAmEstab()
-                + valor.getRcoPuntoEmision()
-                + valor.getRcoSecuencialText() + ".xml";
+                    + amb.getAmEstab()
+                    + valor.getRcoPuntoEmision()
+                    + valor.getRcoSecuencialText() + ".xml";
 
 
         /*RUTAS FINALES DE,LOS ARCHIVOS XML FIRMADOS Y AUTORIZADOS*/
@@ -240,7 +244,7 @@ public class ListaRetenciones {
         archivo es la ruta del archivo xml generado
         nomre del archivo a firmar*/
         XAdESBESSignature.firmar(archivo, nombreArchivoXML,
-                amb.getAmClaveAccesoSri(), amb, folderFirmado);
+                    amb.getAmClaveAccesoSri(), amb, folderFirmado);
 
         f = new File(pathArchivoFirmado);
 
@@ -297,15 +301,15 @@ public class ListaRetenciones {
                             /*se agrega la la autorizacion, fecha de autorizacion y se firma nuevamente*/
                             archivoEnvioCliente = aut.generaXMLComprobanteRetencion(valor, amb, foldervoAutorizado, nombreArchivoXML);
                             XAdESBESSignature.firmar(archivoEnvioCliente,
-                                    nombreArchivoXML,
-                                    amb.getAmClaveAccesoSri(),
-                                    amb, foldervoAutorizado);
+                                        nombreArchivoXML,
+                                        amb.getAmClaveAccesoSri(),
+                                        amb, foldervoAutorizado);
 
                             fEnvio = new File(archivoEnvioCliente);
 
                             servicioRetencionCompra.modificar(valor);
                             System.out.println("PATH DEL ARCHIVO PARA ENVIAR AL CLIENTE " + archivoEnvioCliente);
-                            ArchivoUtils.reporteGeneralPdfMail(archivoEnvioCliente.replace(".xml", ".pdf"), valor.getRcoCodigo(), "RET",amb);
+                            ArchivoUtils.reporteGeneralPdfMail(archivoEnvioCliente.replace(".xml", ".pdf"), valor.getRcoCodigo(), "RET", amb);
 //                            ArchivoUtils.zipFile(fEnvio, archivoEnvioCliente);
                             /*GUARDA EL PATH PDF CREADO*/
                             valor.setRcoPathRet(archivoEnvioCliente.replace(".xml", ".pdf"));
@@ -323,9 +327,31 @@ public class ListaRetenciones {
 //                        }
                             if (valor.getIdCabecera().getIdProveedor().getProvCorreo() != null) {
                                 mail.sendMailSimple(valor.getIdCabecera().getIdProveedor().getProvCorreo(),
-                                        "Gracias por preferirnos se ha emitido su retencion electrónica",
-                                        attachFiles,
-                                        "RETENCION ELECTRONICA", valor.getRcoAutorizacion(), amb);
+                                            "Gracias por preferirnos se ha emitido su retencion electrónica",
+                                            attachFiles,
+                                            "RETENCION ELECTRONICA", valor.getRcoAutorizacion(), amb);
+                            }
+
+                            /*ENVIO DE PDF A QB*/
+                            try {
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                String URLAPI = "http://qbs.tucontador.ec:" + amb.getAmPuerto().trim() + "/api/enviar-documentos?nombreArchivo=" + nombreArchivoXML.replace(".xml", ".pdf") + "&pathArchivo=" + archivoEnvioCliente.replace(".xml", ".pdf") + "&tipoDocumento=RET&txtId=" + valor.getIdQuick();
+                                HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
+                                            HttpClientBuilder.create().build());
+                                RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+                                String response = restTemplate.getForObject(URLAPI, String.class);
+                                System.out.println("RESPUESTA WS REPORTE " + response);
+                                if (true) {
+                                    Clients.showNotification("PDF cargado en Quick Books",
+                                                Clients.NOTIFICATION_TYPE_INFO, null, "middle_center", 2000, true);
+                                } else {
+                                    Clients.showNotification("EL PDF no pudo ser cargado en Quick Books",
+                                                Clients.NOTIFICATION_TYPE_ERROR, null, "middle_center", 2000, true);
+                                }
+//        listaDatos = servicioFacturaReporte.findBetweenFechas(inicio, fin);
+                            } catch (Exception e) {
+                                Clients.showNotification("WS DESCONECTADO" + e.getMessage(),
+                                            Clients.NOTIFICATION_TYPE_ERROR, null, "middle_center", 2000, true);
                             }
                         }
 
@@ -357,26 +383,82 @@ public class ListaRetenciones {
     /*envia el doc al sri y notifica por correo electronico*/
     @Command
     @NotifyChange({"listaRetencionCompras"})
+    public void enviarPDF(@BindingParam("valor") RetencionCompra valor) {
+
+
+        try {
+            
+            String foldervoAutorizado = PATH_BASE + File.separator + amb.getAmAutorizados()
+                        + File.separator + new Date().getYear()
+                        + File.separator + new Date().getMonth();
+            
+            String nombreArchivoXML = File.separator + "RET-"
+                        + amb.getAmEstab()
+                        + valor.getRcoPuntoEmision()
+                        + valor.getRcoSecuencialText() + ".pdf";
+            
+            String archivoEnvioCliente = foldervoAutorizado + File.separator + nombreArchivoXML;
+            ArchivoUtils.reporteGeneralPdfMail(archivoEnvioCliente.replace(".xml", ".pdf"), valor.getRcoCodigo(), "RET", amb);
+            /*ENVIO DE PDF A QB*/
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                String URLAPI = "http://qbs.tucontador.ec:" + amb.getAmPuerto().trim() + "/api/enviar-documentos?nombreArchivo=" + nombreArchivoXML.replace(".xml", ".pdf") + "&pathArchivo=" + archivoEnvioCliente.replace(".xml", ".pdf") + "&tipoDocumento=RET&txtId=" + valor.getIdQuick();
+                HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
+                            HttpClientBuilder.create().build());
+                RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+                String response = restTemplate.getForObject(URLAPI, String.class);
+                System.out.println("RESPUESTA WS REPORTE " + response);
+                if (true) {
+                    Clients.showNotification("PDF cargado en Quick Books",
+                                Clients.NOTIFICATION_TYPE_INFO, null, "middle_center", 2000, true);
+                } else {
+                    Clients.showNotification("EL PDF no pudo ser cargado en Quick Books",
+                                Clients.NOTIFICATION_TYPE_ERROR, null, "middle_center", 2000, true);
+                }
+//        listaDatos = servicioFacturaReporte.findBetweenFechas(inicio, fin);
+            } catch (Exception e) {
+                Clients.showNotification("WS DESCONECTADO" + e.getMessage(),
+                            Clients.NOTIFICATION_TYPE_ERROR, null, "middle_center", 2000, true);
+            }
+        } catch (JRException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(                        Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(ListaRetenciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Command
+    @NotifyChange({"listaRetencionCompras"})
     public void reenviarSri(@BindingParam("valor") RetencionCompra valor)
-            throws JRException, IOException, NamingException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+                throws JRException, IOException, NamingException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         String folderGenerados = PATH_BASE + File.separator + amb.getAmGenerados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
         String folderEnviarCliente = PATH_BASE + File.separator + amb.getAmEnviocliente()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
         String folderFirmado = PATH_BASE + File.separator + amb.getAmFirmados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
 
         String foldervoAutorizado = PATH_BASE + File.separator + amb.getAmAutorizados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
 
         String folderNoAutorizados = PATH_BASE + File.separator + amb.getAmNoAutorizados()
-                + File.separator + new Date().getYear()
-                + File.separator + new Date().getMonth();
+                    + File.separator + new Date().getYear()
+                    + File.separator + new Date().getMonth();
 
         /*EN EL CASO DE NO EXISTIR LOS DIRECTORIOS LOS CREA*/
         File folderGen = new File(folderGenerados);
@@ -405,9 +487,9 @@ public class ListaRetenciones {
 
  /*PARA CREAR EL ARCHIVO XML FIRMADO*/
         String nombreArchivoXML = File.separator + "RET-"
-                + amb.getAmEstab()
-                + valor.getRcoPuntoEmision()
-                + valor.getRcoSecuencialText() + ".xml";
+                    + amb.getAmEstab()
+                    + valor.getRcoPuntoEmision()
+                    + valor.getRcoSecuencialText() + ".xml";
 
 
         /*RUTAS FINALES DE,LOS ARCHIVOS XML FIRMADOS Y AUTORIZADOS*/
@@ -428,7 +510,7 @@ public class ListaRetenciones {
         archivo es la ruta del archivo xml generado
         nomre del archivo a firmar*/
         XAdESBESSignature.firmar(archivo, nombreArchivoXML,
-                amb.getAmClaveAccesoSri(), amb, folderFirmado);
+                    amb.getAmClaveAccesoSri(), amb, folderFirmado);
 
         f = new File(pathArchivoFirmado);
 
@@ -476,15 +558,15 @@ public class ListaRetenciones {
                     /*se agrega la la autorizacion, fecha de autorizacion y se firma nuevamente*/
                     archivoEnvioCliente = aut.generaXMLComprobanteRetencion(valor, amb, foldervoAutorizado, nombreArchivoXML);
                     XAdESBESSignature.firmar(archivoEnvioCliente,
-                            nombreArchivoXML,
-                            amb.getAmClaveAccesoSri(),
-                            amb, foldervoAutorizado);
+                                nombreArchivoXML,
+                                amb.getAmClaveAccesoSri(),
+                                amb, foldervoAutorizado);
 
                     fEnvio = new File(archivoEnvioCliente);
 
                     servicioRetencionCompra.modificar(valor);
                     System.out.println("PATH DEL ARCHIVO PARA ENVIAR AL CLIENTE " + archivoEnvioCliente);
-                    ArchivoUtils.reporteGeneralPdfMail(archivoEnvioCliente.replace(".xml", ".pdf"), valor.getRcoCodigo(), "RET",amb);
+                    ArchivoUtils.reporteGeneralPdfMail(archivoEnvioCliente.replace(".xml", ".pdf"), valor.getRcoCodigo(), "RET", amb);
 //                            ArchivoUtils.zipFile(fEnvio, archivoEnvioCliente);
                     /*GUARDA EL PATH PDF CREADO*/
                     valor.setRcoPathRet(archivoEnvioCliente.replace(".xml", ".pdf"));
@@ -502,9 +584,9 @@ public class ListaRetenciones {
 //                        }
                     if (valor.getIdCabecera().getIdProveedor().getProvCorreo() != null) {
                         mail.sendMailSimple(valor.getIdCabecera().getIdProveedor().getProvCorreo(),
-                                "Gracias por preferirnos se ha emitido su retencion electrónica",
-                                attachFiles,
-                                "RETENCION ELECTRONICA", valor.getRcoAutorizacion(), amb);
+                                    "Gracias por preferirnos se ha emitido su retencion electrónica",
+                                    attachFiles,
+                                    "RETENCION ELECTRONICA", valor.getRcoAutorizacion(), amb);
                     }
                 }
 
@@ -667,7 +749,7 @@ public class ListaRetenciones {
             con = emf.unwrap(Connection.class);
 
             String reportFile = Executions.getCurrent().getDesktop().getWebApp()
-                    .getRealPath("/reportes");
+                        .getRealPath("/reportes");
             String reportPath = "";
 
             reportPath = reportFile + File.separator + "retencion.jasper";
@@ -676,7 +758,7 @@ public class ListaRetenciones {
 
             //  parametros.put("codUsuario", String.valueOf(credentialLog.getAdUsuario().getCodigoUsuario()));
             parametros.put("numfactura", retencionCompra.getRcoCodigo());
-             parametros.put("codTipoAmbiente",amb.getCodTipoambiente());
+            parametros.put("codTipoAmbiente", amb.getCodTipoambiente());
 
             if (con != null) {
                 System.out.println("Conexión Realizada Correctamenteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
@@ -692,7 +774,7 @@ public class ListaRetenciones {
 //para pasar al visor
             map.put("pdf", fileContent);
             org.zkoss.zul.Window window = (org.zkoss.zul.Window) Executions.createComponents(
-                    "/venta/contenedorReporte.zul", null, map);
+                        "/venta/contenedorReporte.zul", null, map);
             window.doModal();
         } catch (Exception e) {
             if (emf != null) {
@@ -720,7 +802,7 @@ public class ListaRetenciones {
 
             map.put("valor", valor.getIdCabecera());
             org.zkoss.zul.Window window = (org.zkoss.zul.Window) Executions.createComponents(
-                    "/compra/retencion.zul", null, map);
+                        "/compra/retencion.zul", null, map);
             window.doModal();
             buscarPorFechas();
 //            window.detach();
@@ -735,15 +817,15 @@ public class ListaRetenciones {
         final HashMap<String, Proveedores> map = new HashMap<String, Proveedores>();
         map.put("valor", valor.getIdCabecera().getIdProveedor());
         org.zkoss.zul.Window window = (org.zkoss.zul.Window) Executions.createComponents(
-                "/nuevo/proveedor.zul", null, map);
+                    "/nuevo/proveedor.zul", null, map);
         window.doModal();
 
     }
-    
+
     @Command
-    public void nuevoProveedor() {       
+    public void nuevoProveedor() {
         org.zkoss.zul.Window window = (org.zkoss.zul.Window) Executions.createComponents(
-                "/nuevo/proveedor.zul", null, null);
+                    "/nuevo/proveedor.zul", null, null);
         window.doModal();
 
     }

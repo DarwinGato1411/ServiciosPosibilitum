@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="retencion" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.4641000000000006"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="196"/>
+	<property name="ireport.y" value="151"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -200,9 +200,9 @@ limit 1;]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="373" splitType="Stretch">
+		<band height="379" splitType="Stretch">
 			<rectangle radius="0">
-				<reportElement x="0" y="268" width="555" height="95"/>
+				<reportElement x="0" y="260" width="555" height="119"/>
 			</rectangle>
 			<rectangle radius="10">
 				<reportElement x="295" y="0" width="260" height="247"/>
@@ -304,14 +304,14 @@ limit 1;]]>
 				<text><![CDATA[Razón Social / Nombres Apellidos: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="195" width="195" height="20"/>
+				<reportElement x="11" y="195" width="219" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[OBLIGADO A LLEVAR CONTABILIDAD]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="206" y="195" width="54" height="20"/>
+				<reportElement x="230" y="195" width="54" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{llevar_contabilidad}]]></textFieldExpression>
 			</textField>
@@ -353,7 +353,7 @@ limit 1;]]>
 				<text><![CDATA[Fecha de emisión: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="312" width="120" height="20"/>
+				<reportElement x="11" y="332" width="120" height="40"/>
 				<box leftPadding="2" rightPadding="2"/>
 				<textElement>
 					<font isBold="true"/>
@@ -395,12 +395,12 @@ limit 1;]]>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{am_estab}+"-"+$F{am_ptoemi}+"-"+$F{rco_secuencial_text}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="193" y="272" width="327" height="20"/>
+				<reportElement x="193" y="272" width="357" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{prov_nombre}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="397" y="292" width="123" height="20"/>
+				<reportElement x="397" y="292" width="153" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{prov_cedula}]]></textFieldExpression>
 			</textField>
@@ -410,7 +410,7 @@ limit 1;]]>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{rco_fecha}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="131" y="312" width="389" height="20"/>
+				<reportElement x="131" y="332" width="419" height="40"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{prov_direccion}]]></textFieldExpression>
 			</textField>
@@ -441,7 +441,7 @@ limit 1;]]>
 				<imageExpression class="java.lang.String"><![CDATA[$F{am_dir_img_punto_venta}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement positionType="Float" x="11" y="332" width="120" height="20"/>
+				<reportElement positionType="Float" x="11" y="312" width="120" height="20"/>
 				<box leftPadding="2" rightPadding="2"/>
 				<textElement>
 					<font isBold="true"/>
@@ -449,7 +449,7 @@ limit 1;]]>
 				<text><![CDATA[Email:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="131" y="332" width="389" height="20"/>
+				<reportElement x="131" y="312" width="419" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{prov_correo}]]></textFieldExpression>
 			</textField>

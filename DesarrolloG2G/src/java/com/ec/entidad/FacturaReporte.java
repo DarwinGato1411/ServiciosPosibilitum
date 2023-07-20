@@ -554,10 +554,10 @@ public class FacturaReporte implements Serializable {
             facEstadoFactura = "ANULADA";
         } else if (facTotal.doubleValue() == facSaldoTotal.doubleValue()) {
             facEstadoFactura = "PENDIENTE";
-        }else if (facTotal.doubleValue()>0 && (facTotal.doubleValue() >facSaldoTotal.doubleValue()) ) {
-            facEstadoFactura = "ABONADA";
         }else if (facTotal.doubleValue()>0 && facSaldoTotal.doubleValue()==0 ) {
             facEstadoFactura = "PAGADA";
+        }else if (facTotal.doubleValue()>0 && (facTotal.doubleValue() >facSaldoTotal.doubleValue()) ) {
+            facEstadoFactura = "ABONADA";
         }
         return facEstadoFactura;
     }

@@ -188,6 +188,9 @@ public class NotaCreditoDebito implements Serializable {
     @JoinColumn(name = "id_factura", referencedColumnName = "id_factura")
     @ManyToOne
     private Factura idFactura;
+    
+      @Column(name = "txn_id")
+    private Integer txnId;
 
     public NotaCreditoDebito() {
     }
@@ -523,6 +526,14 @@ public class NotaCreditoDebito implements Serializable {
 
     public void setMensajeInf(String mensajeInf) {
         this.mensajeInf = mensajeInf;
+    }
+
+    public Integer getTxnId() {
+        return txnId;
+    }
+
+    public void setTxnId(Integer txnId) {
+        this.txnId = txnId;
     }
 
   
